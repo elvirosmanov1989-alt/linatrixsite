@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>Family Task App</title>
+
+  <style>
+
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #38bdf8;
+    }
+
+    input {
+      padding: 12px;
+      width: 250px;
+      border-radius: 8px;
+      border: none;
+      margin: 5px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .mainBtn {
+      background: #22c55e;
+      color: white;
+    }
+
+    .completeBtn {
+      background: #38bdf8;
+      color: white;
+    }
+
+    .task {
+      background: #1e293b;
+      margin: 20px auto;
+      padding: 20px;
+      width: 420px;
+      border-radius: 12px;
+    }
+
+    .completed {
+      border: 2px solid #22c55e;
+      opacity: 0.85;
+    }
+
+    .counterBox {
+      background: #1e293b;
+      width: 320px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    #app {
+      display: none;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+
+
+<div id="auth">
+
+  <h1>🔐 Family Login</h1>
+
+  <input
+    id="email"
+    placeholder="Email">
+
+  <br>
+
+  <input
+    id="password"
+    type="password"
+    placeholder="Password">
+
+  <br>
+
+  <button
+    class="mainBtn"
+    onclick="register()">
+
+    Register
+
+  </button>
+
+  <button
+    class="mainBtn"
+    onclick="login()">
+
+    Login
+
+  </button>
+
+</div>
+
+
+
+
+
+<div id="app">
+
+  <h1>🏠 Family Task App</h1>
+
+  <button onclick="logout()">
+
+    Logout
+
+  </button>
+
+
+
+  <div>
+
+    <input
+      id="taskInput"
+      placeholder="Enter new task">
+
+
+    <button
+      class="mainBtn"
+      onclick="addTask()">
+
+      Add Task
+
+    </button>
+
+  </div>
+
+
+
+
+  <div class="counterBox">
+
+    <h2>📊 Today's Statistics</h2>
+
+    <h3 id="elvirCount">
+      Elvir: 0
+    </h3>
+
+    <h3 id="nurlanaCount">
+      Nurlana: 0
+    </h3>
+
+  </div>
+
+
+
+
+  <div id="taskList"></div>
+
+</div>
+
+
+
+
+
+<script type="module">
+
+import { initializeApp }
+
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+
+
+import {
+
+  getDatabase,
+
+  ref,
+
+  push,
+
+  onValue,
+
+  update
+
+}
+
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+
+
+import {
+
+  getAuth,
+
+  createUserWithEmailAndPassword,
+
+  signInWithEmailAndPassword,
+
+  onAuthStateChanged,
+
+  signOut
+
+}
+
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+
+
+
+const firebaseConfig = {
+
+  apiKey:
+  "AIzaSyAIMxMTyOJBdfsDSbsNXPazrpDpIzbLUDQ",
+
+  authDomain:
+  "family-task-app-4407d.firebaseapp.com",
+
+  databaseURL:
+  "https://family-task-app-4407d-default-rtdb.firebaseio.com",
+
+  projectId:
+  "family-task-app-4407d",
+
+  storageBucket:
+  "family-task-app-4407d.firebasestorage.app",
+
+  messagingSenderId:
+  "1081523131491",
+
+  appId:
+  "1:1081523131491:web:cf6b678f82b429ef6bd456"
+
+};
+
+
+
+
+
+const app =
+  initializeApp(firebaseConfig);
+
+const db =
+  getDatabase(app);
+
+const auth =
+  getAuth(app);
+
+const tasksRef =
+  ref(db, "tasks");
+
+
+
+
+
+function getTodayDate() {
+
+  return new Date()
+    .toISOString()
+    .split("T")[0];
+
+}
+
+
+
+
+
+window.register = function () {
+
+  const email =
+    document.getElementById("email").value;
+
+  const password =
+    document.getElementById("password").value;
+
+
+
+  createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  )
+
+  .then(() => {
+
+    alert("Registered successfully");
+
+  })
+
+  .catch((error) => {
+
+    alert(error.message);
+
+  });
+
+};
+
+
+
+
+
+window.login = function () {
+
+  const email =
+    document.getElementById("email").value;
+
+  const password =
+    document.getElementById("password").value;
+
+
+
+  signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  )
+
+  .then(() => {
+
+    alert("Logged in");
+
+  })
+
+  .catch((error) => {
+
+    alert(error.message);
+
+  });
+
+};
+
+
+
+
+
+window.logout = function () {
+
+  signOut(auth);
+
+};
+
+
+
+
+
+onAuthStateChanged(auth, (user) => {
+
+  if (user) {
+
+    document.getElementById("auth").style.display =
+      "none";
+
+    document.getElementById("app").style.display =
+      "block";
+
+  }
+
+  else {
+
+    document.getElementById("auth").style.display =
+      "block";
+
+    document.getElementById("app").style.display =
+      "none";
+
+  }
+
+});
+
+
+
+
+
+window.addTask = function () {
+
+  const input =
+    document.getElementById("taskInput");
+
+  if (input.value.trim() === "")
+    return;
+
+
+
+  push(tasksRef, {
+
+    text:
+      input.value,
+
+    createdBy:
+      auth.currentUser.email,
+
+    completedBy:
+      "",
+
+    lastCompletedDate:
+      "",
+
+    completionHistory: {}
+
+  });
+
+
+
+  input.value = "";
+
+};
+
+
+
+
+
+window.completeTask = function (taskId) {
+
+  const today =
+    getTodayDate();
+
+  const userEmail =
+    auth.currentUser.email;
+
+
+
+  const userName =
+
+    userEmail
+      .toLowerCase()
+      .includes("elvir")
+
+    ?
+
+    "elvir"
+
+    :
+
+    "nurlana";
+
+
+
+  // TASK UPDATE
+
+  const taskRef =
+    ref(db, "tasks/" + taskId);
+
+
+
+  update(taskRef, {
+
+    completedBy:
+      userEmail,
+
+    lastCompletedDate:
+      today,
+
+    ["completionHistory/" + today]:
+      userEmail
+
+  });
+
+
+
+
+  // DAILY STATS UPDATE
+
+  const statsRef =
+    ref(db, "dailyStats/" + today);
+
+
+
+  onValue(statsRef, (snapshot) => {
+
+    let data =
+      snapshot.val() || {
+
+        elvir: 0,
+
+        nurlana: 0
+
+      };
+
+
+
+    data[userName]++;
+
+
+
+    update(statsRef, data);
+
+  }, {
+
+    onlyOnce: true
+
+  });
+
+};
+
+
+
+
+
+
+
+onValue(tasksRef, (snapshot) => {
+
+  const taskList =
+    document.getElementById("taskList");
+
+  taskList.innerHTML = "";
+
+
+
+  const data =
+    snapshot.val();
+
+  if (!data)
+    return;
+
+
+
+  const today =
+    getTodayDate();
+
+
+
+
+  Object.entries(data).forEach(([id, task]) => {
+
+    const completedToday =
+
+      task.lastCompletedDate === today;
+
+
+
+
+    taskList.innerHTML += `
+
+      <div class="task ${completedToday ? "completed" : ""}">
+
+        <h2>
+
+          ${task.text}
+
+        </h2>
+
+
+
+        <p>
+
+          Created by:
+          ${task.createdBy || "Unknown"}
+
+        </p>
+
+
+
+        <p>
+
+          Last completed by:
+          ${task.completedBy || "Nobody yet"}
+
+        </p>
+
+
+
+        <p>
+
+          Last completed date:
+          ${task.lastCompletedDate || "Never"}
+
+        </p>
+
+
+
+
+
+        ${
+
+          !completedToday
+
+          ?
+
+          `
+
+          <button
+            class="completeBtn"
+            onclick="completeTask('${id}')">
+
+            Complete Today
+
+          </button>
+
+          `
+
+          :
+
+          `
+
+          <h3>
+            ✅ Completed Today
+          </h3>
+
+          `
+
+        }
+
+      </div>
+
+    `;
+
+  });
+
+});
+
+
+
+
+
+
+
+const statsRef =
+  ref(db, "dailyStats");
+
+
+
+onValue(statsRef, (snapshot) => {
+
+  const data =
+    snapshot.val() || {};
+
+
+
+  const today =
+    getTodayDate();
+
+
+
+  const todayStats =
+    data[today] || {
+
+      elvir: 0,
+
+      nurlana: 0
+
+    };
+
+
+
+  document.getElementById("elvirCount").innerText =
+
+    "Elvir: " +
+    todayStats.elvir;
+
+
+
+  document.getElementById("nurlanaCount").innerText =
+
+    "Nurlana: " +
+    todayStats.nurlana;
+
+});
+
+</script>
+
+</body>
+</html>
