@@ -1,0 +1,122 @@
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+h1 {
+  color: #38bdf8;
+}
+
+input {
+  padding: 12px;
+  width: 250px;
+  border-radius: 8px;
+  border: none;
+  margin: 5px;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.mainBtn {
+  background: #22c55e;
+  color: white;
+}
+
+.completeBtn {
+  background: #38bdf8;
+  color: white;
+}
+
+.task {
+  background: #1e293b;
+  margin: 20px auto;
+  padding: 20px;
+  width: 420px;
+  border-radius: 12px;
+}
+
+.completed {
+  border: 2px solid #22c55e;
+  opacity: 0.9;
+}
+
+.counterBox {
+  background: #1e293b;
+  width: 420px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.chatPopupButton {
+
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #38bdf8;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 999;
+
+}
+
+.chatPopup {
+
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 350px;
+  background: #1e293b;
+  border-radius: 15px;
+  padding: 15px;
+  display: none;
+  z-index: 999;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+
+}
+
+.chatHeader {
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+}
+
+#chatMessages {
+
+  height: 300px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+
+}
+
+.message {
+
+  background: #334155;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-align: left;
+
+}
+
+#app {
+  display: none;
+}

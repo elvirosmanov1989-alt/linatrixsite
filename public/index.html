@@ -1,73 +1,342 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
   <title>Family Task App</title>
 
+  <link
+    rel="manifest"
+    href="manifest.json"
+  />
+
+  <meta
+    name="theme-color"
+    content="#38bdf8"
+  />
+
   <style>
 
-    body {
-      font-family: Arial;
-      background: #0f172a;
-      color: white;
-      padding: 30px;
-      text-align: center;
+    * {
+      box-sizing: border-box;
     }
 
-    h1 {
-      color: #38bdf8;
+    body {
+
+      margin: 0;
+
+      font-family: Arial, sans-serif;
+
+      background: #020617;
+
+      color: white;
+
+    }
+
+
+
+
+
+
+    /* AUTH */
+
+    .container {
+
+      max-width: 420px;
+
+      margin: 60px auto;
+
+    }
+
+    .card {
+
+      background: #0f172a;
+
+      padding: 30px;
+
+      border-radius: 24px;
+
+      border: 1px solid #1e293b;
+
+      margin-bottom: 20px;
+
     }
 
     input {
-      padding: 12px;
-      width: 250px;
-      border-radius: 8px;
+
+      width: 100%;
+
+      padding: 14px;
+
       border: none;
-      margin: 5px;
+
+      border-radius: 12px;
+
+      margin-top: 12px;
+
+      margin-bottom: 12px;
+
+      font-size: 16px;
+
     }
 
     button {
-      margin: 5px;
-      padding: 10px 15px;
+
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
 
-    .mainBtn {
+      border-radius: 12px;
+
+      padding: 14px;
+
       background: #22c55e;
+
       color: white;
+
+      cursor: pointer;
+
+      font-weight: bold;
+
+      width: 100%;
+
+      margin-top: 10px;
+
     }
 
-    .completeBtn {
-      background: #38bdf8;
-      color: white;
+    .secondaryBtn {
+
+      background: #334155;
+
     }
 
-    .task {
-      background: #1e293b;
-      margin: 20px auto;
-      padding: 20px;
-      width: 420px;
-      border-radius: 12px;
+    .hidden {
+
+      display: none;
+
     }
 
-    .completed {
-      border: 2px solid #22c55e;
-      opacity: 0.85;
-    }
 
-    .counterBox {
-      background: #1e293b;
-      width: 320px;
-      margin: 30px auto;
-      padding: 20px;
-      border-radius: 12px;
-    }
+
+
+
+
+    /* APP LAYOUT */
 
     #app {
+
       display: none;
+
+      min-height: 100vh;
+
+    }
+
+
+
+
+
+
+    /* SIDEBAR */
+
+    #sidebar {
+
+      position: fixed;
+
+      left: 0;
+
+      top: 0;
+
+      width: 280px;
+
+      height: 100vh;
+
+      background: #0f172a;
+
+      border-right: 1px solid #1e293b;
+
+      padding: 20px;
+
+      overflow-y: auto;
+
+    }
+
+
+
+
+
+
+    #sidebar h1 {
+
+      text-align: center;
+
+      margin-bottom: 30px;
+
+    }
+
+
+
+
+
+
+    .menuItem {
+
+      background: #111827;
+
+      padding: 16px;
+
+      border-radius: 14px;
+
+      margin-bottom: 15px;
+
+      cursor: pointer;
+
+      font-size: 18px;
+
+      font-weight: bold;
+
+    }
+
+
+
+
+
+
+    .dropdownContent {
+
+      display: none;
+
+      margin-top: 10px;
+
+      background: #020617;
+
+      border-radius: 12px;
+
+      padding: 10px;
+
+    }
+
+
+
+
+
+
+    /* MAIN CONTENT */
+
+    #mainContent {
+
+      margin-left: 280px;
+
+      padding: 30px;
+
+    }
+
+
+
+
+
+
+    .appCard {
+
+      background: #0f172a;
+
+      padding: 20px;
+
+      border-radius: 20px;
+
+      margin-bottom: 20px;
+
+      border: 1px solid #1e293b;
+
+    }
+
+
+
+
+
+
+    /* CHAT */
+
+    #chatToggle {
+
+      position: fixed;
+
+      bottom: 20px;
+
+      right: 20px;
+
+      width: 70px;
+
+      height: 70px;
+
+      border-radius: 50%;
+
+      background: #22c55e;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-size: 30px;
+
+      cursor: pointer;
+
+      z-index: 9999;
+
+    }
+
+
+
+
+
+
+    #chatWindow {
+
+      position: fixed;
+
+      bottom: 100px;
+
+      right: 20px;
+
+      width: 350px;
+
+      height: 500px;
+
+      background: #0f172a;
+
+      border-radius: 20px;
+
+      border: 1px solid #1e293b;
+
+      display: none;
+
+      flex-direction: column;
+
+      overflow: hidden;
+
+      z-index: 9999;
+
+    }
+
+
+
+
+
+
+    #chatMessages {
+
+      flex: 1;
+
+      overflow-y: auto;
+
+      padding: 15px;
+
     }
 
   </style>
@@ -78,598 +347,436 @@
 
 
 
-<div id="auth">
 
-  <h1>🔐 Family Login</h1>
 
-  <input
-    id="email"
-    placeholder="Email">
+  <!-- AUTH -->
 
-  <br>
+  <div
+    id="auth"
+    class="container"
+  >
 
-  <input
-    id="password"
-    type="password"
-    placeholder="Password">
-
-  <br>
-
-  <button
-    class="mainBtn"
-    onclick="register()">
-
-    Register
-
-  </button>
-
-  <button
-    class="mainBtn"
-    onclick="login()">
-
-    Login
-
-  </button>
-
-</div>
+    <h1>🏠 Family Task App</h1>
 
 
 
 
 
-<div id="app">
+    <!-- LOGIN -->
 
-  <h1>🏠 Family Task App</h1>
+    <div
+      id="loginBox"
+      class="card"
+    >
 
-  <button onclick="logout()">
+      <h2>Login</h2>
 
-    Logout
+      <input
+        id="loginUsername"
+        placeholder="Username"
+      />
 
-  </button>
+      <input
+        id="loginPassword"
+        type="password"
+        placeholder="Password"
+      />
+
+      <button onclick="login()">
+        Login
+      </button>
+
+      <button
+        class="secondaryBtn"
+        onclick="showRegister()"
+      >
+        Not Registered?
+      </button>
+
+    </div>
 
 
 
-  <div>
-
-    <input
-      id="taskInput"
-      placeholder="Enter new task">
 
 
-    <button
-      class="mainBtn"
-      onclick="addTask()">
+    <!-- REGISTER -->
 
-      Add Task
+    <div
+      id="registerBox"
+      class="card hidden"
+    >
 
-    </button>
+      <h2>Create Account</h2>
+
+      <input
+        id="registerUsername"
+        placeholder="Username"
+      />
+
+      <input
+        id="registerEmail"
+        type="email"
+        placeholder="Email"
+      />
+
+      <input
+        id="registerPassword"
+        type="password"
+        placeholder="Password"
+      />
+
+      <button onclick="register()">
+        Register
+      </button>
+
+      <button
+        class="secondaryBtn"
+        onclick="showLogin()"
+      >
+        Back To Login
+      </button>
+
+    </div>
 
   </div>
 
 
 
 
-  <div class="counterBox">
 
-    <h2>📊 Today's Statistics</h2>
 
-    <h3 id="elvirCount">
-      Elvir: 0
-    </h3>
 
-    <h3 id="nurlanaCount">
-      Nurlana: 0
-    </h3>
+  <!-- APP -->
 
-  </div>
+  <div id="app">
 
 
 
 
-  <div id="taskList"></div>
 
-</div>
+    <!-- SIDEBAR -->
 
+    <div id="sidebar">
 
+      <h1 id="welcomeUser"></h1>
 
+      <button onclick="logout()">
+        Logout
+      </button>
 
 
-<script type="module">
 
-import { initializeApp }
 
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
+      <!-- USERS -->
 
+      <div
+        class="menuItem"
+        onclick="toggleDropdown('usersDropdown')"
+      >
 
-import {
+        👨‍👩‍👧 Users
 
-  getDatabase,
+        <div
+          id="usersDropdown"
+          class="dropdownContent"
+        >
 
-  ref,
+          <div id="usersList"></div>
 
-  push,
-
-  onValue,
-
-  update
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
-
-
-
-import {
-
-  getAuth,
-
-  createUserWithEmailAndPassword,
-
-  signInWithEmailAndPassword,
-
-  onAuthStateChanged,
-
-  signOut
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-
-
-
-
-const firebaseConfig = {
-
-  apiKey:
-  "AIzaSyAIMxMTyOJBdfsDSbsNXPazrpDpIzbLUDQ",
-
-  authDomain:
-  "family-task-app-4407d.firebaseapp.com",
-
-  databaseURL:
-  "https://family-task-app-4407d-default-rtdb.firebaseio.com",
-
-  projectId:
-  "family-task-app-4407d",
-
-  storageBucket:
-  "family-task-app-4407d.firebasestorage.app",
-
-  messagingSenderId:
-  "1081523131491",
-
-  appId:
-  "1:1081523131491:web:cf6b678f82b429ef6bd456"
-
-};
-
-
-
-
-
-const app =
-  initializeApp(firebaseConfig);
-
-const db =
-  getDatabase(app);
-
-const auth =
-  getAuth(app);
-
-const tasksRef =
-  ref(db, "tasks");
-
-
-
-
-
-function getTodayDate() {
-
-  return new Date()
-    .toISOString()
-    .split("T")[0];
-
-}
-
-
-
-
-
-window.register = function () {
-
-  const email =
-    document.getElementById("email").value;
-
-  const password =
-    document.getElementById("password").value;
-
-
-
-  createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  )
-
-  .then(() => {
-
-    alert("Registered successfully");
-
-  })
-
-  .catch((error) => {
-
-    alert(error.message);
-
-  });
-
-};
-
-
-
-
-
-window.login = function () {
-
-  const email =
-    document.getElementById("email").value;
-
-  const password =
-    document.getElementById("password").value;
-
-
-
-  signInWithEmailAndPassword(
-    auth,
-    email,
-    password
-  )
-
-  .then(() => {
-
-    alert("Logged in");
-
-  })
-
-  .catch((error) => {
-
-    alert(error.message);
-
-  });
-
-};
-
-
-
-
-
-window.logout = function () {
-
-  signOut(auth);
-
-};
-
-
-
-
-
-onAuthStateChanged(auth, (user) => {
-
-  if (user) {
-
-    document.getElementById("auth").style.display =
-      "none";
-
-    document.getElementById("app").style.display =
-      "block";
-
-  }
-
-  else {
-
-    document.getElementById("auth").style.display =
-      "block";
-
-    document.getElementById("app").style.display =
-      "none";
-
-  }
-
-});
-
-
-
-
-
-window.addTask = function () {
-
-  const input =
-    document.getElementById("taskInput");
-
-  if (input.value.trim() === "")
-    return;
-
-
-
-  push(tasksRef, {
-
-    text:
-      input.value,
-
-    createdBy:
-      auth.currentUser.email,
-
-    completedBy:
-      "",
-
-    lastCompletedDate:
-      "",
-
-    completionHistory: {}
-
-  });
-
-
-
-  input.value = "";
-
-};
-
-
-
-
-
-window.completeTask = function (taskId) {
-
-  const today =
-    getTodayDate();
-
-  const userEmail =
-    auth.currentUser.email;
-
-
-
-  const userName =
-
-    userEmail
-      .toLowerCase()
-      .includes("elvir")
-
-    ?
-
-    "elvir"
-
-    :
-
-    "nurlana";
-
-
-
-  // TASK UPDATE
-
-  const taskRef =
-    ref(db, "tasks/" + taskId);
-
-
-
-  update(taskRef, {
-
-    completedBy:
-      userEmail,
-
-    lastCompletedDate:
-      today,
-
-    ["completionHistory/" + today]:
-      userEmail
-
-  });
-
-
-
-
-  // DAILY STATS UPDATE
-
-  const statsRef =
-    ref(db, "dailyStats/" + today);
-
-
-
-  onValue(statsRef, (snapshot) => {
-
-    let data =
-      snapshot.val() || {
-
-        elvir: 0,
-
-        nurlana: 0
-
-      };
-
-
-
-    data[userName]++;
-
-
-
-    update(statsRef, data);
-
-  }, {
-
-    onlyOnce: true
-
-  });
-
-};
-
-
-
-
-
-
-
-onValue(tasksRef, (snapshot) => {
-
-  const taskList =
-    document.getElementById("taskList");
-
-  taskList.innerHTML = "";
-
-
-
-  const data =
-    snapshot.val();
-
-  if (!data)
-    return;
-
-
-
-  const today =
-    getTodayDate();
-
-
-
-
-  Object.entries(data).forEach(([id, task]) => {
-
-    const completedToday =
-
-      task.lastCompletedDate === today;
-
-
-
-
-    taskList.innerHTML += `
-
-      <div class="task ${completedToday ? "completed" : ""}">
-
-        <h2>
-
-          ${task.text}
-
-        </h2>
-
-
-
-        <p>
-
-          Created by:
-          ${task.createdBy || "Unknown"}
-
-        </p>
-
-
-
-        <p>
-
-          Last completed by:
-          ${task.completedBy || "Nobody yet"}
-
-        </p>
-
-
-
-        <p>
-
-          Last completed date:
-          ${task.lastCompletedDate || "Never"}
-
-        </p>
-
-
-
-
-
-        ${
-
-          !completedToday
-
-          ?
-
-          `
-
-          <button
-            class="completeBtn"
-            onclick="completeTask('${id}')">
-
-            Complete Today
-
-          </button>
-
-          `
-
-          :
-
-          `
-
-          <h3>
-            ✅ Completed Today
-          </h3>
-
-          `
-
-        }
+        </div>
 
       </div>
 
-    `;
-
-  });
-
-});
 
 
 
 
+      <!-- REQUESTS -->
+
+      <div
+        class="menuItem"
+        onclick="toggleDropdown('requestsDropdown')"
+      >
+
+        🔔 Requests
+
+        <div
+          id="requestsDropdown"
+          class="dropdownContent"
+        >
+
+          <div id="notificationsList"></div>
+
+        </div>
+
+      </div>
 
 
 
-const statsRef =
-  ref(db, "dailyStats");
+
+
+      <!-- TASKS -->
+
+      <div
+        class="menuItem"
+        onclick="toggleDropdown('tasksDropdown')"
+      >
+
+        📝 Tasks
+
+        <div
+          id="tasksDropdown"
+          class="dropdownContent"
+        >
+
+          <input
+            id="taskInput"
+            placeholder="Add new task"
+          />
+
+          <button onclick="addTask()">
+            Add Task
+          </button>
+
+          <div id="taskList"></div>
+
+        </div>
+
+      </div>
+
+    </div>
 
 
 
-onValue(statsRef, (snapshot) => {
-
-  const data =
-    snapshot.val() || {};
 
 
 
-  const today =
-    getTodayDate();
+
+    <!-- MAIN -->
+
+    <div id="mainContent">
+
+      <div class="appCard">
+
+        <h1>📊 Daily Stats</h1>
+
+        <div id="statsList"></div>
+
+      </div>
+
+    </div>
+
+  </div>
 
 
 
-  const todayStats =
-    data[today] || {
-
-      elvir: 0,
-
-      nurlana: 0
-
-    };
 
 
 
-  document.getElementById("elvirCount").innerText =
 
-    "Elvir: " +
-    todayStats.elvir;
+  <!-- CHAT -->
+
+  <div id="chatToggle">
+    💬
+  </div>
 
 
 
-  document.getElementById("nurlanaCount").innerText =
 
-    "Nurlana: " +
-    todayStats.nurlana;
 
-});
+  <div id="chatWindow">
 
-</script>
+    <div
+      style="
+        background:#111827;
+        padding:15px;
+        display:flex;
+        justify-content:space-between;
+      "
+    >
+
+      Family Chat
+
+      <span
+        id="closeChat"
+        style="cursor:pointer;"
+      >
+        ✖
+      </span>
+
+    </div>
+
+
+
+
+
+    <div id="chatMessages"></div>
+
+
+
+
+
+    <div
+      style="
+        padding:15px;
+        border-top:1px solid #1e293b;
+      "
+    >
+
+      <input
+        id="chatInput"
+        placeholder="Write message..."
+      />
+
+      <button onclick="sendMessage()">
+        Send
+      </button>
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  <script>
+
+    function showRegister() {
+
+      document.getElementById("loginBox").classList.add("hidden");
+
+      document.getElementById("registerBox").classList.remove("hidden");
+
+    }
+
+
+
+    function showLogin() {
+
+      document.getElementById("registerBox").classList.add("hidden");
+
+      document.getElementById("loginBox").classList.remove("hidden");
+
+    }
+
+
+
+
+
+
+    function toggleDropdown(id) {
+
+      const element =
+        document.getElementById(id);
+
+
+
+      if (
+
+        element.style.display === "block"
+
+      ) {
+
+        element.style.display = "none";
+
+      }
+
+      else {
+
+        element.style.display = "block";
+
+      }
+
+    }
+
+
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const chatToggle =
+        document.getElementById("chatToggle");
+
+      const chatWindow =
+        document.getElementById("chatWindow");
+
+      const closeChat =
+        document.getElementById("closeChat");
+
+
+
+      chatToggle.addEventListener("click", function () {
+
+        chatWindow.style.display = "flex";
+
+      });
+
+
+
+      closeChat.addEventListener("click", function () {
+
+        chatWindow.style.display = "none";
+
+      });
+
+    });
+
+  </script>
+
+
+
+
+
+
+
+  <!-- JS -->
+
+  <script
+    type="module"
+    src="./js/firebase.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/auth.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/profiles.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/requests.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/tasks.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/chat.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/counters.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/ui.js"
+  ></script>
 
 </body>
+
 </html>
