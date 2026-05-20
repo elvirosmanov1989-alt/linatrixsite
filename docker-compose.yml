@@ -1,0 +1,12 @@
+services:
+
+  family-task-app:
+
+    build: .
+
+    container_name: family-task-app
+
+    ports:
+      - "8080:80"
+
+    restart: always
