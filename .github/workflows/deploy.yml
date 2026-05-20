@@ -7,19 +7,15 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Deploy to server
-        uses: appleboy/ssh-action@master
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-        with:
-          host: ${{ secrets.VM_IP }}
-          username: ${{ secrets.VM_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-          script: |
-            cd /home/linatrixsite
-            git pull
-            docker-compose down
-            docker-compose up -d --build
+      - name: Deploy application
+        run: |
+          cd /home/linatrixsite
+          git pull
+          docker-compose down
+          docker-compose up -d --build
