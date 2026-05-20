@@ -1,72 +1,327 @@
-# LinatrixSite – Custom Domain & Email Infrastructure Demo
+# LinatrixSite — DevOps Infrastructure Project
 
 ## Overview
 
-This project demonstrates deployment and infrastructure configuration for a live production-style website using Firebase Hosting, Cloudflare, GitHub, and custom domain email routing.
+LinatrixSite is a production-style DevOps and infrastructure project built to demonstrate practical deployment engineering, automation, monitoring, and containerized application management.
 
-Live Website:
-https://linatrixsite.site
+The project combines:
 
-## Features
+* Linux server administration
+* Docker containerization
+* NGINX reverse proxy configuration
+* GitHub Actions CI/CD
+* Prometheus monitoring
+* Grafana observability dashboards
+* Firebase production hosting
+* Git-based deployment workflows
 
-* Firebase Hosting deployment
-* Custom domain integration
-* Cloudflare DNS management
-* SSL/TLS configuration
-* Email routing with Cloudflare
-* MX, SPF, and DKIM configuration
-* Git & GitHub version control
-* Live production deployment
+---
 
-## Technologies Used
+# Infrastructure Architecture
 
-* HTML/CSS/JavaScript
-* Firebase Hosting
-* Cloudflare
-* Git & GitHub
-* DNS Management
-* Email Routing Infrastructure
+## Production Layer
 
-## Infrastructure Tasks Completed
+### Firebase Hosting
 
-* Connected custom domain to hosting platform
-* Configured DNS records
-* Migrated nameservers to Cloudflare
-* Enabled SSL/TLS protection
-* Configured email forwarding
-* Verified email routing functionality
-* Managed project using Git workflow
+Used as the production hosting platform for:
 
-## Email Infrastructure
+* Static frontend delivery
+* HTTPS support
+* CDN distribution
+* Production domain hosting
 
-Configured professional custom email forwarding:
+### Cloudflare / Domain Infrastructure
 
-[elvir.osmanov.1989@linatrixsite.site](mailto:elvir.osmanov.1989@linatrixsite.site)
+Configured for:
 
-using:
-
-* MX records
-* SPF
-* DKIM
-* Cloudflare Email Routing
-
-## GitHub Workflow
-
-* Local Git repository initialization
-* Commit management
-* Remote GitHub repository integration
-* Production deployment tracking
-
-## Deployment
-
-The website is deployed live using Firebase Hosting and connected to a custom production domain.
-
-## Purpose
-
-This project was built as a practical DevOps/System Administration learning and portfolio project focused on:
-
+* Custom domain routing
 * DNS management
-* Cloud infrastructure
-* Email configuration
-* Hosting deployment
-* Git version control
+* Production website accessibility
+
+---
+
+# Linux Infrastructure Environment
+
+## Ubuntu Server (node3)
+
+A dedicated Ubuntu Linux VM used as infrastructure and DevOps environment.
+
+Responsibilities:
+
+* Docker runtime
+* Container orchestration
+* Monitoring stack
+* NGINX reverse proxy
+* CI/CD deployment target
+
+---
+
+# Docker Containerization
+
+## Application Container
+
+The frontend application was containerized using Docker.
+
+### Dockerfile
+
+The application is packaged inside an NGINX container:
+
+```dockerfile
+FROM nginx:alpine
+
+COPY public /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+### Docker Compose
+
+Docker Compose was used to:
+
+* Build application containers
+* Manage networking
+* Expose ports
+* Simplify deployment workflows
+
+Deployment command:
+
+```bash
+docker-compose up -d --build
+```
+
+---
+
+# NGINX Reverse Proxy
+
+NGINX was configured as a reverse proxy server.
+
+Responsibilities:
+
+* Forward HTTP traffic
+* Route requests to Docker containers
+* Prepare environment for HTTPS/SSL
+* Enable production-style architecture
+
+Flow:
+
+```text
+User Request
+     ↓
+NGINX Reverse Proxy
+     ↓
+Docker Container
+     ↓
+Frontend Application
+```
+
+---
+
+# GitHub Integration
+
+## Git-Based Deployment Workflow
+
+The Linux VM is connected directly to GitHub.
+
+Workflow:
+
+```text
+Local Development
+      ↓
+Git Push
+      ↓
+GitHub Repository
+      ↓
+GitHub Actions CI/CD
+      ↓
+Linux VM Deployment
+```
+
+---
+
+# CI/CD Pipeline
+
+## GitHub Actions Automation
+
+A deployment pipeline was created using GitHub Actions.
+
+### Automated Deployment Steps
+
+On every push to the `main` branch:
+
+1. GitHub Actions connects to the Linux server
+2. Pulls latest code changes
+3. Stops existing containers
+4. Rebuilds Docker containers
+5. Restarts application automatically
+
+### Workflow File
+
+```yaml
+name: Deploy to Node3
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+
+        with:
+          host: ${{ secrets.VM_IP }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+          script: |
+            cd /home/linatrixsite
+            git pull
+            docker-compose down
+            docker-compose up -d --build
+```
+
+---
+
+# Monitoring & Observability
+
+## Prometheus
+
+Prometheus was deployed for infrastructure metrics collection.
+
+Monitored metrics include:
+
+* CPU usage
+* RAM utilization
+* Container uptime
+* Network activity
+* Docker service metrics
+
+---
+
+## Grafana
+
+Grafana was deployed as visualization platform.
+
+Features:
+
+* Real-time dashboards
+* Infrastructure observability
+* System resource visualization
+* Monitoring panels
+
+---
+
+## Node Exporter
+
+Node Exporter was added to expose Linux system metrics to Prometheus.
+
+Collected host metrics:
+
+* CPU
+* Memory
+* Filesystem
+* Load averages
+* Network statistics
+
+---
+
+# Monitoring Stack Architecture
+
+```text
+Linux Server
+    ↓
+Node Exporter
+    ↓
+Prometheus
+    ↓
+Grafana Dashboards
+```
+
+---
+
+# Technologies Used
+
+## Infrastructure
+
+* Ubuntu Server
+* Docker
+* Docker Compose
+* NGINX
+* GitHub Actions
+* Prometheus
+* Grafana
+* Node Exporter
+
+## Hosting & Networking
+
+* Firebase Hosting
+* Cloudflare DNS
+* Custom Domain Routing
+
+## Development
+
+* HTML
+* CSS
+* JavaScript
+* Git
+* GitHub
+
+---
+
+# Skills Demonstrated
+
+## DevOps
+
+* Linux server management
+* Containerization
+* Reverse proxy configuration
+* CI/CD automation
+* Infrastructure monitoring
+* GitOps workflows
+* Docker networking
+* Service orchestration
+
+## Cloud & Infrastructure
+
+* Domain management
+* Deployment pipelines
+* Observability systems
+* Production-style architecture
+* Infrastructure troubleshooting
+
+---
+
+# Future Improvements
+
+Planned next steps:
+
+* Kubernetes deployment
+* Terraform infrastructure automation
+* Ansible provisioning
+* SSL certificate automation
+* Advanced monitoring alerts
+* Multi-container microservices architecture
+* Horizontal scaling
+* Load balancing
+* Centralized logging stack
+
+---
+
+# Project Purpose
+
+This project was created to gain hands-on experience with real-world DevOps practices and infrastructure engineering concepts.
+
+It demonstrates the ability to:
+
+* Deploy applications in Linux environments
+* Automate deployments
+* Configure monitoring systems
+* Manage Dockerized applications
+* Build production-style infrastructure workflows
+* Integrate GitHub-based CI/CD pipelines
