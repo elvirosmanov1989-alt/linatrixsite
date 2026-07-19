@@ -480,6 +480,7 @@
         <div
           id="usersDropdown"
           class="dropdownContent"
+          onclick="event.stopPropagation()"
         >
 
           <div id="usersList"></div>
@@ -504,6 +505,7 @@
         <div
           id="requestsDropdown"
           class="dropdownContent"
+          onclick="event.stopPropagation()"
         >
 
           <div id="notificationsList"></div>
@@ -527,6 +529,7 @@
 
         <div
           id="tasksDropdown"
+          onclick="event.stopPropagation()"
           class="dropdownContent"
         >
 
@@ -735,11 +738,15 @@
 
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+  <script>
+    window.API_BASE = "http://192.168.13.130:3000";
+  </script>
+
   <!-- JS -->
 
   <script
     type="module"
-    src="./js/firebase.js"
   ></script>
 
   <script

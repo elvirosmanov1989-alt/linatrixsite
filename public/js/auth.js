@@ -1,364 +1,96 @@
-import {
+import { apiFetch, setToken, setCurrentUser, getCurrentUser, getToken } from "./api.js";
 
-  auth,
-  db
-
-}
-
-from "./firebase.js";
-
-
-
-import {
-
-  createUserWithEmailAndPassword,
-
-  signInWithEmailAndPassword,
-
-  onAuthStateChanged,
-
-  signOut
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-
-
-import {
-
-  ref,
-
-  set,
-
-  get
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
-
-
-
-
-
-
-
-/* =========================
-   REGISTER
-========================= */
-
+/* REGISTER */
 window.register = async function () {
-
-  const username =
-
-    document.getElementById("registerUsername").value.trim();
-
-
-
-  const email =
-
-    document.getElementById("registerEmail").value.trim();
-
-
-
-  const password =
-
-    document.getElementById("registerPassword").value.trim();
-
-
-
-
+  const username = document.getElementById("registerUsername").value.trim();
+  const email = document.getElementById("registerEmail").value.trim();
+  const password = document.getElementById("registerPassword").value.trim();
 
   if (!username || !email || !password) {
-
     alert("Fill all fields");
-
     return;
-
   }
-
-
-
-
 
   try {
-
-    const userCredential =
-
-      await createUserWithEmailAndPassword(
-
-        auth,
-        email,
-        password
-
-      );
-
-
-
-
-
-    const user =
-      userCredential.user;
-
-
-
-
-
-    await set(
-
-      ref(db, "users/" + user.uid),
-
-      {
-
-        username:
-          username,
-
-        email:
-          email
-
-      }
-
-    );
-
-
-
-
-
+    await apiFetch("/auth/register", {
+      method: "POST",
+      body: JSON.stringify({ username, email, password }),
+    });
     alert("Registered successfully");
-
-
-
-
-
     document.getElementById("registerUsername").value = "";
-
     document.getElementById("registerEmail").value = "";
-
     document.getElementById("registerPassword").value = "";
-
-
-
-
-
     showLogin();
-
-  }
-
-  catch (error) {
-
+  } catch (error) {
     console.error(error);
-
     alert(error.message);
-
   }
-
 };
 
-
-
-
-
-
-
-/* =========================
-   LOGIN
-========================= */
-
+/* LOGIN */
 window.login = async function () {
-
-  const username =
-
-    document.getElementById("loginUsername").value.trim();
-
-
-
-  const password =
-
-    document.getElementById("loginPassword").value.trim();
-
-
-
-
+  const username = document.getElementById("loginUsername").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
 
   if (!username || !password) {
-
     alert("Fill all fields");
-
     return;
-
   }
-
-
-
-
 
   try {
-
-    const snapshot =
-      await get(ref(db, "users"));
-
-
-
-
-
-    const users =
-      snapshot.val();
-
-
-
-
-
-    if (!users) {
-
-      alert("No users found");
-
-      return;
-
-    }
-
-
-
-
-
-    let foundEmail = null;
-
-
-
-
-
-    Object.values(users).forEach((user) => {
-
-      if (user.username === username) {
-
-        foundEmail = user.email;
-
-      }
-
+    const data = await apiFetch("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
     });
-
-
-
-
-
-    if (!foundEmail) {
-
-      alert("Username not found");
-
-      return;
-
-    }
-
-
-
-
-
-    await signInWithEmailAndPassword(
-
-      auth,
-      foundEmail,
-      password
-
-    );
-
-
-
-
-
+    setToken(data.token);
+    setCurrentUser(data.user);
     alert("Logged in successfully");
-
-  }
-
-  catch (error) {
-
+    await enterApp();
+  } catch (error) {
     console.error(error);
-
     alert(error.message);
-
   }
-
 };
 
-
-
-
-
-
-
-/* =========================
-   LOGOUT
-========================= */
-
+/* LOGOUT */
 window.logout = async function () {
-
-  await signOut(auth);
-
+  try {
+    await apiFetch("/auth/logout", { method: "POST" });
+  } catch (err) {}
+  setToken(null);
+  setCurrentUser(null);
+  document.getElementById("auth").style.display = "block";
+  document.getElementById("app").style.display = "none";
 };
 
-
-
-
-
-
-
-/* =========================
-   AUTH STATE
-========================= */
-
-onAuthStateChanged(auth, async (user) => {
-
+/* AUTH STATE */
+async function enterApp() {
+  document.getElementById("auth").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  const user = getCurrentUser();
   if (user) {
-
-    document.getElementById("auth").style.display =
-      "none";
-
-
-
-    document.getElementById("app").style.display =
-      "block";
-
-
-
-
-
-    const snapshot =
-
-      await get(
-
-        ref(db, "users/" + user.uid)
-
-      );
-
-
-
-
-
-    const userData =
-      snapshot.val();
-
-
-
-
-
-    if (userData) {
-
-      document.getElementById("welcomeUser").innerText =
-
-        "Welcome, " + userData.username;
-
-    }
-
+    document.getElementById("welcomeUser").innerText = "Welcome, " + user.username;
   }
+  window.dispatchEvent(new Event("auth:ready"));
+}
 
-  else {
-
-    document.getElementById("auth").style.display =
-      "block";
-
-
-
-    document.getElementById("app").style.display =
-      "none";
-
+async function checkAuthOnLoad() {
+  const token = getToken();
+  if (!token) {
+    document.getElementById("auth").style.display = "block";
+    document.getElementById("app").style.display = "none";
+    return;
   }
+  try {
+    const data = await apiFetch("/auth/me");
+    setCurrentUser(data.user);
+    await enterApp();
+  } catch (err) {
+    setToken(null);
+    setCurrentUser(null);
+    document.getElementById("auth").style.display = "block";
+    document.getElementById("app").style.display = "none";
+  }
+}
 
-});
+window.addEventListener("DOMContentLoaded", checkAuthOnLoad);

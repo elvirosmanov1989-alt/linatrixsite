@@ -1,212 +1,52 @@
-import {
-
-  db,
-  auth
-
-}
-
-from "./firebase.js";
-
-
-
-import {
-
-  ref,
-  onValue,
-  push,
-  get
-
-}
-
-from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
-
-
-
-
-
-
-
-const usersRef =
-  ref(db, "users");
-
-
-
-
-
-
-
-
-
-onValue(usersRef, async (snapshot) => {
-
-  const usersList =
-    document.getElementById("usersList");
-
-
-
-  if (!usersList)
-    return;
-
-
-
-
-
-  usersList.innerHTML = "";
-
-
-
-
-
-  const data =
-    snapshot.val();
-
-
-
-
-
-  if (!data)
-    return;
-
-
-
-
-
-  const currentUser =
-    auth.currentUser;
-
-
-
-
-
-  if (!currentUser)
-    return;
-
-
-
-
-
-  const currentSnapshot =
-
-    await get(
-
-      ref(db, "users/" + currentUser.uid)
-
-    );
-
-
-
-
-
-  const currentData =
-    currentSnapshot.val();
-
-
-
-
-
-  Object.entries(data).forEach(([uid, user]) => {
-
-
-
-
-
-    if (
-      uid === currentUser.uid
-    ) return;
-
-
-
-
-
-    usersList.innerHTML += `
-
-      <div class="message">
-
-        <strong>
-
-          ${user.username}
-
-        </strong>
-
-        <br><br>
-
-        <button
-          class="mainBtn"
-          onclick="sendFamilyRequest(
-            '${user.username}'
-          )">
-
-          Send Request
-
-        </button>
-
-      </div>
-
-    `;
-
-  });
-
-});
-
-
-
-
-
-
-
-
-
-window.sendFamilyRequest = async function (toUser) {
-
-  const currentUser =
-    auth.currentUser;
-
-
-
-
-
-  const snapshot =
-
-    await get(
-
-      ref(db, "users/" + currentUser.uid)
-
-    );
-
-
-
-
-
-  const currentData =
-    snapshot.val();
-
-
-
-
-
-  push(
-
-    ref(db, "familyRequests"),
-
-    {
-
-      from:
-        currentData.username,
-
-      to:
-        toUser,
-
-      status:
-        "pending"
-
-    }
-
-  );
-
-
-
-
-
-  alert("Request sent");
-
+import { apiFetch, getCurrentUser } from "./api.js";
+
+window.sendFamilyRequest = async function (toUsername) {
+  try {
+    await apiFetch("/requests", {
+      method: "POST",
+      body: JSON.stringify({ toUsername }),
+    });
+    alert("Request sent");
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
 };
+
+async function refreshUsers() {
+  const usersList = document.getElementById("usersList");
+  if (!usersList) return;
+  let data, connectionsData;
+  try {
+    data = await apiFetch("/users");
+    connectionsData = await apiFetch("/requests/connections");
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+  const currentUser = getCurrentUser();
+  const connectedUsernames = new Set();
+  (connectionsData.connections || []).forEach((conn) => {
+    conn.members.forEach((m) => {
+      if (currentUser && m !== currentUser.username) connectedUsernames.add(m);
+    });
+  });
+  usersList.innerHTML = "";
+  data.users.forEach((user) => {
+    const isConnected = connectedUsernames.has(user.username);
+    usersList.innerHTML += `
+      <div class="message">
+        <strong>${user.username}</strong>
+        <br><br>
+        ${
+          isConnected
+            ? `<h3>Already Family</h3>`
+            : `<button class="mainBtn" onclick="sendFamilyRequest('${user.username}')">Send Request</button>`
+        }
+      </div>
+    `;
+  });
+}
+
+window.addEventListener("DOMContentLoaded", refreshUsers);
+window.addEventListener("auth:ready", refreshUsers);
