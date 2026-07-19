@@ -67,3 +67,6 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# Kubernetes secrets - never commit real credentials
+k8s/02-secret.yaml
