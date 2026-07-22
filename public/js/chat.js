@@ -50,7 +50,7 @@ function connectSocket() {
     console.error("socket.io-client not loaded - check index.html script tag");
     return;
   }
-  socket = io(window.API_BASE || "http://localhost:3000");
+  socket = io({ path: "/api/socket.io" });
   socket.on("chat:message", renderMessage);
 }
 

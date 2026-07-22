@@ -16,7 +16,7 @@ const requestRoutes = require("./routes/requests");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, { cors: { origin: "*" }, path: "/api/socket.io" });
 
 app.set("io", io);
 app.use(cors());
