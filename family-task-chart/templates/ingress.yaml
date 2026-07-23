@@ -2,14 +2,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: family-task-ingress
-  namespace: family-task-app
+  namespace: {{ .Values.namespace }}
   annotations:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.className }}
   rules:
-    - host: linatrixsite.local
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
           - path: /
@@ -18,11 +18,11 @@ spec:
               service:
                 name: frontend
                 port:
-                  number: 80
+                  number: {{ .Values.frontend.port }}
           - path: /api
             pathType: Prefix
             backend:
               service:
                 name: backend
                 port:
-                  number: 3000
+                  number: {{ .Values.backend.port }}

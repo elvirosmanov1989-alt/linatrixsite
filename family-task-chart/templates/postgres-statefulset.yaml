@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
-  namespace: family-task-app
+  namespace: {{ .Values.namespace }}
 spec:
   serviceName: postgres
   replicas: 1
@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:16-alpine
+          image: {{ .Values.postgres.image }}
           ports:
-            - containerPort: 5432
+            - containerPort: {{ .Values.postgres.port }}
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -54,7 +54,7 @@ spec:
         name: postgres-storage
       spec:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: local-path
+        storageClassName: {{ .Values.postgres.storageClassName }}
         resources:
           requests:
-            storage: 1Gi
+            storage: {{ .Values.postgres.storageSize }}

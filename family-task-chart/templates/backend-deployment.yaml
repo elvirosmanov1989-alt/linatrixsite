@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
-  namespace: family-task-app
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.backend.replicas }}
   selector:
     matchLabels:
       app: backend
@@ -14,19 +14,17 @@ spec:
         app: backend
     spec:
       nodeSelector:
-        kubernetes.io/hostname: node1
+        kubernetes.io/hostname: {{ .Values.nodeSelector.hostname }}
       tolerations:
         - key: "node-role.kubernetes.io/control-plane"
           operator: "Exists"
           effect: "NoSchedule"
       containers:
         - name: backend
-      containers:
-        - name: backend
-          image: linatrixsite-backend:latest
+          image: {{ .Values.backend.image }}
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 3000
+            - containerPort: {{ .Values.backend.port }}
           env:
             - name: PORT
               valueFrom:
@@ -66,19 +64,19 @@ spec:
           readinessProbe:
             httpGet:
               path: /readyz
-              port: 3000
+              port: {{ .Values.backend.port }}
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 3000
+              port: {{ .Values.backend.port }}
             initialDelaySeconds: 10
             periodSeconds: 15
           resources:
             requests:
-              cpu: "100m"
-              memory: "128Mi"
+              cpu: {{ .Values.backend.resources.requests.cpu | quote }}
+              memory: {{ .Values.backend.resources.requests.memory | quote }}
             limits:
-              cpu: "500m"
-              memory: "256Mi"
+              cpu: {{ .Values.backend.resources.limits.cpu | quote }}
+              memory: {{ .Values.backend.resources.limits.memory | quote }}

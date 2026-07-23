@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
-  namespace: family-task-app
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.frontend.replicas }}
   selector:
     matchLabels:
       app: frontend
@@ -14,33 +14,33 @@ spec:
         app: frontend
     spec:
       nodeSelector:
-        kubernetes.io/hostname: node1
+        kubernetes.io/hostname: {{ .Values.nodeSelector.hostname }}
       tolerations:
         - key: "node-role.kubernetes.io/control-plane"
           operator: "Exists"
           effect: "NoSchedule"
       containers:
         - name: frontend
-          image: linatrixsite-frontend:latest
+          image: {{ .Values.frontend.image }}
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 80
+            - containerPort: {{ .Values.frontend.port }}
           readinessProbe:
             httpGet:
               path: /
-              port: 80
+              port: {{ .Values.frontend.port }}
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /
-              port: 80
+              port: {{ .Values.frontend.port }}
             initialDelaySeconds: 10
             periodSeconds: 15
           resources:
             requests:
-              cpu: "50m"
-              memory: "64Mi"
+              cpu: {{ .Values.frontend.resources.requests.cpu | quote }}
+              memory: {{ .Values.frontend.resources.requests.memory | quote }}
             limits:
-              cpu: "200m"
-              memory: "128Mi"
+              cpu: {{ .Values.frontend.resources.limits.cpu | quote }}
+              memory: {{ .Values.frontend.resources.limits.memory | quote }}
