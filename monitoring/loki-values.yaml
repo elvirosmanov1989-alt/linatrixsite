@@ -1,0 +1,30 @@
+loki:
+  persistence:
+    enabled: true
+    storageClassName: local-path
+    size: 2Gi
+  config:
+    limits_config:
+      retention_period: 72h
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+promtail:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+grafana:
+  enabled: false
+
+prometheus:
+  enabled: false
