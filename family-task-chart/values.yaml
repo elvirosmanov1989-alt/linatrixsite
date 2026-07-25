@@ -2,7 +2,7 @@ namespace: family-task-app
 
 frontend:
   image: linatrixsite-frontend:latest
-  replicas: 2
+  replicas: 1
   port: 80
   resources:
     requests:
