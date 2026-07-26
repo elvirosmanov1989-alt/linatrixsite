@@ -1,7 +1,7 @@
 namespace: family-task-app
 
 frontend:
-  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:latest
+  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:${CI_COMMIT_SHORT_SHA}
   replicas: 1
   port: 80
   resources:
@@ -13,7 +13,7 @@ frontend:
       memory: "128Mi"
 
 backend:
-  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:latest
+  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:${CI_COMMIT_SHORT_SHA}
   replicas: 1
   port: 3000
   resources:
