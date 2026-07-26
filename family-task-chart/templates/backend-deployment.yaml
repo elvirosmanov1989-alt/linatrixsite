@@ -12,6 +12,15 @@ spec:
     metadata:
       labels:
         app: backend
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "family-task-app"
+        vault.hashicorp.com/agent-inject-secret-config: "secret/data/family-task-app"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{`{{- with secret "secret/data/family-task-app" -}}`}}
+          export DB_PASSWORD="{{`{{ .Data.data.dbPassword }}`}}"
+          export JWT_SECRET="{{`{{ .Data.data.jwtSecret }}`}}"
+          {{`{{- end -}}`}}
     spec:
       imagePullSecrets:
         - name: gitlab-registry-cred
@@ -19,6 +28,9 @@ spec:
         - name: backend
           image: {{ .Values.backend.image }}
           imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args:
+            - source /vault/secrets/config && exec node server.js
           ports:
             - containerPort: {{ .Values.backend.port }}
           env:
@@ -47,27 +59,17 @@ spec:
                 secretKeyRef:
                   name: family-task-secrets
                   key: DB_USER
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: family-task-secrets
-                  key: DB_PASSWORD
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: family-task-secrets
-                  key: JWT_SECRET
           readinessProbe:
             httpGet:
               path: /readyz
               port: {{ .Values.backend.port }}
-            initialDelaySeconds: 5
+            initialDelaySeconds: 15
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /healthz
               port: {{ .Values.backend.port }}
-            initialDelaySeconds: 10
+            initialDelaySeconds: 20
             periodSeconds: 15
           resources:
             requests:
