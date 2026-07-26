@@ -1,7 +1,7 @@
 namespace: family-task-app
 
 frontend:
-  image: linatrixsite-frontend:latest
+  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:latest
   replicas: 1
   port: 80
   resources:
@@ -13,7 +13,7 @@ frontend:
       memory: "128Mi"
 
 backend:
-  image: linatrixsite-backend:latest
+  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:latest
   replicas: 1
   port: 3000
   resources:
@@ -45,5 +45,3 @@ ingress:
   host: linatrixsite.local
   className: nginx
 
-nodeSelector:
-  hostname: node1

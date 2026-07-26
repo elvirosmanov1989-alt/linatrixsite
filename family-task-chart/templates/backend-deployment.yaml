@@ -13,16 +13,12 @@ spec:
       labels:
         app: backend
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: {{ .Values.nodeSelector.hostname }}
-      tolerations:
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Exists"
-          effect: "NoSchedule"
+      imagePullSecrets:
+        - name: gitlab-registry-cred
       containers:
         - name: backend
           image: {{ .Values.backend.image }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: {{ .Values.backend.port }}
           env:

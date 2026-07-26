@@ -1,0 +1,51 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
+  FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend
+
+build-backend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA ./backend
+    - docker push $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+build-frontend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker push $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+update-manifest:
+  stage: deploy
+  image: alpine:latest
+  needs:
+    - build-backend
+    - build-frontend
+  script:
+    - apk add --no-cache git sed
+    - git config --global user.email "ci-bot@linatrixsite.local"
+    - git config --global user.name "GitLab CI"
+    - git clone "https://ci-token:${CI_PUSH_TOKEN}@gitlab.com/elvir.osmanov.1989/linatrixsite.git" repo
+    - cd repo
+    - sed -i "s|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:.*|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:${CI_COMMIT_SHORT_SHA}|" family-task-chart/values.yaml
+    - sed -i "s|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:.*|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:${CI_COMMIT_SHORT_SHA}|" family-task-chart/values.yaml
+    - git add family-task-chart/values.yaml
+    - git commit -m "CI: update image tags to ${CI_COMMIT_SHORT_SHA} [skip ci]" || echo "No changes to commit"
+    - git push origin main
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'

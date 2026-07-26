@@ -13,16 +13,12 @@ spec:
       labels:
         app: frontend
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: {{ .Values.nodeSelector.hostname }}
-      tolerations:
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Exists"
-          effect: "NoSchedule"
+      imagePullSecrets:
+        - name: gitlab-registry-cred
       containers:
         - name: frontend
           image: {{ .Values.frontend.image }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: {{ .Values.frontend.port }}
           readinessProbe:
