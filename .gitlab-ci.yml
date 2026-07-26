@@ -42,8 +42,8 @@ update-manifest:
     - git config --global user.name "GitLab CI"
     - git clone "https://ci-token:${CI_PUSH_TOKEN}@gitlab.com/elvir.osmanov.1989/linatrixsite.git" repo
     - cd repo
-    - 'sed -i "s|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:.*|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:${CI_COMMIT_SHORT_SHA}|" family-task-chart/values.yaml'
-    - 'sed -i "s|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:.*|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:${CI_COMMIT_SHORT_SHA}|" family-task-chart/values.yaml'
+    - "sed -i 's|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:.*|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:${CI_COMMIT_SHORT_SHA}|' family-task-chart/values.yaml"
+    - "sed -i 's|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:.*|image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:${CI_COMMIT_SHORT_SHA}|' family-task-chart/values.yaml"
     - git add family-task-chart/values.yaml
     - git commit -m "CI: update image tags to ${CI_COMMIT_SHORT_SHA} [skip ci]" || echo "No changes to commit"
     - git push origin main
