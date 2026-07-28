@@ -22,6 +22,7 @@ spec:
           export JWT_SECRET="{{`{{ .Data.data.jwtSecret }}`}}"
           {{`{{- end -}}`}}
     spec:
+      serviceAccountName: family-task-app-sa
       imagePullSecrets:
         - name: gitlab-registry-cred
       containers:

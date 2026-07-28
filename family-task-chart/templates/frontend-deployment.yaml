@@ -13,6 +13,7 @@ spec:
       labels:
         app: frontend
     spec:
+      serviceAccountName: family-task-app-sa
       imagePullSecrets:
         - name: gitlab-registry-cred
       containers:
