@@ -38,8 +38,8 @@ config:
 
 secrets:
   dbUser: "postgres"
-  dbPassword: "CHANGE_ME"
-  jwtSecret: "CHANGE_ME_LONG_RANDOM_STRING"
+  dbPassword: "m9cJyIuZ8B0JW+rf4QqDVzb+ResH700h"
+  jwtSecret: "N2/X+CoszLQp4QP38iWTyyW4ve22PH5QIlWDKLW9WJ4="
 
 ingress:
   host: linatrixsite.local
