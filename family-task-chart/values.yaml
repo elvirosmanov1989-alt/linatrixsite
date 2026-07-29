@@ -1,7 +1,7 @@
 namespace: family-task-app
 
 frontend:
-  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:a0d4b557
+  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:b7bcdf9f
   replicas: 1
   port: 80
   resources:
@@ -13,7 +13,7 @@ frontend:
       memory: "128Mi"
 
 backend:
-  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:a0d4b557
+  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:b7bcdf9f
   replicas: 1
   port: 3000
   resources:
