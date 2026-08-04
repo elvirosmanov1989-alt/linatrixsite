@@ -13,7 +13,7 @@ frontend:
       memory: "128Mi"
 
 backend:
-  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:85208126
+  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/backend:6e547cef
   replicas: 1
   port: 3000
   resources:
@@ -42,6 +42,3 @@ secrets:
 ingress:
   host: linatrixsite.local
   className: nginx
-
-
-
