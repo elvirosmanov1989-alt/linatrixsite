@@ -45,3 +45,8 @@ ingress:
   host: linatrixsite.local
   className: nginx
 
+
+awsBackup:
+  accessKeyId: AKIA4BAC3MNUH2EZNSFW 
+  secretAccessKey: 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
+
