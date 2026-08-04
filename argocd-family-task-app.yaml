@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: family-task-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://gitlab.com/elvir.osmanov.1989/linatrixsite.git
+    targetRevision: main
+    path: family-task-chart
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: family-task-app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

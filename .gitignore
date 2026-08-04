@@ -72,3 +72,8 @@ node_modules/
 k8s/02-secret.yaml
 vault.token
 db.jwtsecrets.txt
+**/.terraform/
+**/.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
