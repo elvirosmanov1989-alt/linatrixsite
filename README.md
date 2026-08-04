@@ -325,3 +325,19 @@ It demonstrates the ability to:
 * Manage Dockerized applications
 * Build production-style infrastructure workflows
 * Integrate GitHub-based CI/CD pipelines
+
+## Rollback Testing (Phase 9)
+
+Tested reverting a bad deployment via GitOps (editing Git, not the cluster
+directly). Confirmed the core principle works: setting `frontend.replicas: 0`
+in `values.yaml` and pushing caused ArgoCD to automatically scale the frontend
+down with no manual `kubectl` intervention; reverting the value back to `1`
+and pushing brought it back the same way.
+
+**Finding during testing:** the GitLab CI pipeline rebuilds and re-tags
+container images on every push to `main`, including config-only commits that
+don't touch application code. This caused repeated merge conflicts in
+`values.yaml` when manual edits and CI's automatic image-tag commits landed
+close together. Future improvement: scope the CI pipeline's build stage to
+only trigger on changes to `backend/` or `frontend/` source paths, not on
+every push to `main`.
