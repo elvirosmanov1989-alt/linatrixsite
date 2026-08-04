@@ -1,8 +1,8 @@
 namespace: family-task-app
 
 frontend:
-  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:this-tag-does-not-exist
-  replicas: 1
+  image: registry.gitlab.com/elvir.osmanov.1989/linatrixsite/frontend:6e547cef
+  replicas: 0
   port: 80
   resources:
     requests:
