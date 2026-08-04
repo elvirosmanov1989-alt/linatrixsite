@@ -1,0 +1,66 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+  namespace: {{ .Values.namespace }}
+spec:
+  schedule: "0 3 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        metadata:
+          annotations:
+            vault.hashicorp.com/agent-inject: "true"
+            vault.hashicorp.com/role: "family-task-app"
+            vault.hashicorp.com/agent-inject-secret-backup-config: "secret/data/family-task-app"
+            vault.hashicorp.com/agent-inject-template-backup-config: |
+              {{`{{- with secret "secret/data/family-task-app" -}}`}}
+              export PGPASSWORD="{{`{{ .Data.data.dbPassword }}`}}"
+              {{`{{- end -}}`}}
+              {{`{{- with secret "secret/data/aws-backup-credentials" -}}`}}
+              export AWS_ACCESS_KEY_ID="{{`{{ .Data.data.accessKeyId }}`}}"
+              export AWS_SECRET_ACCESS_KEY="{{`{{ .Data.data.secretAccessKey }}`}}"
+              {{`{{- end -}}`}}
+        spec:
+          serviceAccountName: family-task-app-sa
+          restartPolicy: Never
+          containers:
+            - name: pg-backup
+              image: postgres:16-alpine
+              env:
+                - name: PGHOST
+                  value: "postgres"
+                - name: PGPORT
+                  value: "5432"
+                - name: PGUSER
+                  value: "postgres"
+                - name: PGDATABASE
+                  value: "family_task_app"
+                - name: AWS_DEFAULT_REGION
+                  value: "eu-north-1"
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -eo pipefail
+                  source /vault/secrets/backup-config
+                  apk add --no-cache aws-cli
+                  TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+                  FILENAME="family-task-app-db-${TIMESTAMP}.sql.gz"
+                  echo "Dumping database..."
+                  pg_dump | gzip > /tmp/${FILENAME}
+                  echo "Dump succeeded, file size:"
+                  ls -lh /tmp/${FILENAME}
+                  echo "Uploading to S3..."
+                  aws s3 cp /tmp/${FILENAME} s3://linatrixsite-velero-backups-2018/postgres-backups/${FILENAME}
+                  echo "Backup complete: ${FILENAME}"
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "128Mi"
+                limits:
+                  cpu: "200m"
+                  memory: "256Mi"
