@@ -14,6 +14,7 @@ spec:
       labels:
         app: postgres
       annotations:
+        {{- if .Values.vault.enabled }}
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "family-task-app"
         vault.hashicorp.com/agent-inject-secret-pg-config: "secret/data/family-task-app"
@@ -21,6 +22,7 @@ spec:
           {{`{{- with secret "secret/data/family-task-app" -}}`}}
           export POSTGRES_PASSWORD="{{`{{ .Data.data.dbPassword }}`}}"
           {{`{{- end -}}`}}
+        {{- end }}
     spec:
       serviceAccountName: family-task-app-sa
       containers:
@@ -28,7 +30,11 @@ spec:
           image: {{ .Values.postgres.image }}
           command: ["/bin/sh", "-c"]
           args:
-            - source /vault/secrets/pg-config && exec docker-entrypoint.sh postgres
+            - |
+              {{- if .Values.vault.enabled }}
+              source /vault/secrets/pg-config
+              {{- end }}
+              exec docker-entrypoint.sh postgres
           ports:
             - containerPort: {{ .Values.postgres.port }}
           env:
@@ -37,6 +43,13 @@ spec:
                 secretKeyRef:
                   name: family-task-secrets
                   key: DB_USER
+            {{- if not .Values.vault.enabled }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: family-task-secrets
+                  key: DB_PASSWORD
+            {{- end }}
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:

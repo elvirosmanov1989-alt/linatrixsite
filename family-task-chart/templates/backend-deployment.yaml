@@ -13,6 +13,7 @@ spec:
       labels:
         app: backend
       annotations:
+        {{- if .Values.vault.enabled }}
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "family-task-app"
         vault.hashicorp.com/agent-inject-secret-config: "secret/data/family-task-app"
@@ -21,6 +22,7 @@ spec:
           export DB_PASSWORD="{{`{{ .Data.data.dbPassword }}`}}"
           export JWT_SECRET="{{`{{ .Data.data.jwtSecret }}`}}"
           {{`{{- end -}}`}}
+        {{- end }}
     spec:
       serviceAccountName: family-task-app-sa
       imagePullSecrets:
@@ -31,7 +33,11 @@ spec:
           imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args:
-            - source /vault/secrets/config && exec node server.js
+            - |
+              {{- if .Values.vault.enabled }}
+              source /vault/secrets/config
+              {{- end }}
+              exec node server.js
           ports:
             - containerPort: {{ .Values.backend.port }}
           env:
@@ -60,6 +66,18 @@ spec:
                 secretKeyRef:
                   name: family-task-secrets
                   key: DB_USER
+            {{- if not .Values.vault.enabled }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: family-task-secrets
+                  key: DB_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: family-task-secrets
+                  key: JWT_SECRET
+            {{- end }}
           readinessProbe:
             httpGet:
               path: /readyz

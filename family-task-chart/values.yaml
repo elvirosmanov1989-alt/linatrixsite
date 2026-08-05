@@ -42,3 +42,6 @@ secrets:
 ingress:
   host: linatrixsite.local
   className: nginx
+
+vault:
+  enabled: true
