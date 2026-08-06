@@ -33,6 +33,20 @@ Two independent, fully working environments exist:
 - Remote state in S3 with DynamoDB locking
 - `gp2` EBS-backed storage via the AWS EBS CSI driver (IRSA-authenticated)
 
+### Deployment Pipeline
+
+![Deployment pipeline](docs/images/01-deployment-pipeline.png)
+
+### What's Running Inside the Cluster
+
+![Cluster internals](docs/images/02-cluster-internals.png)
+
+### Cloud Provisioning Path
+
+![Cloud deployment](docs/images/03-cloud-deployment.png)
+
+**[View the full evidence gallery →](docs/EVIDENCE.md)**
+
 ## Tech Stack by Phase
 
 | Phase | Technology |
