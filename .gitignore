@@ -77,3 +77,4 @@ db.jwtsecrets.txt
 *.tfstate
 *.tfstate.*
 crash.log
+vault.unseal
