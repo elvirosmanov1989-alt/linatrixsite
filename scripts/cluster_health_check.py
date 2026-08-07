@@ -5,7 +5,7 @@ def count_ready(command) :
     lines = result.stdout.splitlines()
     ready_count = 0
     for line in lines:
-        if "Ready" in line or "Running" in line:
+        if "Ready" in line or "Running" in line or "Deployment" in line:
             ready_count = ready_count + 1
     return ready_count
 
@@ -18,6 +18,6 @@ print("Nodes Ready:", nodes_ready)
 pods_ready = count_ready(["kubectl", "get", "pods","-n", "family-task-app"])
 print("Pods Running:", pods_ready)
 
-hpa_ready = count_ready(["kubectl", "get", "hpa"])
+hpa_ready = count_ready(["kubectl", "get", "hpa","-n","family-task-app"])
 print("HPA Running", hpa_ready)
 
