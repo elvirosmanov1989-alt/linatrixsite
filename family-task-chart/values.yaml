@@ -40,7 +40,7 @@ secrets:
   dbUser: "postgres"
 
 ingress:
-  host: linatrixsite.local
+  host: linatrixsite.site
   className: nginx
 
 vault:
