@@ -6,301 +6,409 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Family Task App</title>
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#e8a33d" />
+  <meta name="theme-color" content="#55735A" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+/* ---------- tokens ---------- */
+:root {
+  --bg: #faf3e4;
+  --surface: #ffffff;
+  --surface-soft: #f3ecdb;
+  --ink: #2e2a22;
+  --ink-soft: #6b6354;
+  --sage: #55735a;
+  --sage-light: #e4ece0;
+  --mustard: #d9a23b;
+  --mustard-light: #f7e8c9;
+  --brick: #b4593a;
+  --brick-light: #f6e2d9;
+  --line: rgba(46, 42, 34, 0.12);
+  --shadow: 0 6px 20px rgba(46, 42, 34, 0.08);
+  --radius: 14px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f4ecdd;
-      background-image:
-        radial-gradient(circle at 1px 1px, rgba(139, 111, 71, 0.08) 1px, transparent 0);
-      background-size: 22px 22px;
-      color: #3a2f24;
-    }
+* { box-sizing: border-box; }
 
-    /* AUTH */
-    .container {
-      max-width: 420px;
-      margin: 60px auto;
-    }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--ink);
+}
 
-    .card {
-      background: #fffdf7;
-      padding: 30px;
-      border-radius: 16px;
-      border: 1px solid #e3d5b8;
-      box-shadow: 0 6px 16px rgba(90, 68, 40, 0.12);
-      margin-bottom: 20px;
-    }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; }
+p { margin: 0; }
 
-    .card h1, .card h2 {
-      color: #3f5a8a;
-    }
+.hidden { display: none; }
 
-    input {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #ddccaa;
-      border-radius: 10px;
-      margin-top: 12px;
-      margin-bottom: 12px;
-      font-size: 16px;
-      background: #fffef9;
-      color: #3a2f24;
-    }
+/* ---------- auth ---------- */
+.container {
+  max-width: 420px;
+  margin: 64px auto;
+  padding: 0 20px;
+}
 
-    button {
-      border: none;
-      border-radius: 10px;
-      padding: 14px;
-      background: #e8a33d;
-      color: #3a2f24;
-      cursor: pointer;
-      font-weight: bold;
-      width: 100%;
-      margin-top: 10px;
-      transition: transform 0.1s ease, background 0.15s ease;
-    }
+.brandMark {
+  text-align: center;
+  margin-bottom: 28px;
+}
 
-    button:hover {
-      background: #dd952b;
-    }
+.brandIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--sage-light);
+  color: var(--sage);
+  font-size: 26px;
+  margin-bottom: 12px;
+}
 
-    button:active {
-      transform: scale(0.98);
-    }
+.brandMark h1 { font-size: 26px; color: var(--ink); }
 
-    .secondaryBtn {
-      background: #d9d1bd;
-      color: #3a2f24;
-    }
+.brandTag {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin-top: 6px;
+}
 
-    .secondaryBtn:hover {
-      background: #cbc1a8;
-    }
+.card {
+  background: var(--surface);
+  padding: 28px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
 
-    .hidden {
-      display: none;
-    }
+.card h2 { font-size: 20px; margin-bottom: 4px; }
 
-    /* APP LAYOUT */
-    #app {
-      display: none;
-      min-height: 100vh;
-    }
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin-top: 12px;
+  font-size: 15px;
+  font-family: var(--font-body);
+  background: var(--surface);
+  color: var(--ink);
+}
 
-    /* SIDEBAR */
-    #sidebar {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 280px;
-      height: 100vh;
-      background: #3f5a8a;
-      border-right: 3px solid #334870;
-      padding: 20px;
-      overflow-y: auto;
-      color: #fdf6e8;
-    }
+input:focus {
+  outline: none;
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px var(--sage-light);
+}
 
-    #sidebar h1 {
-      text-align: center;
-      margin-bottom: 30px;
-      color: #fdf6e8;
-    }
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  background: var(--sage);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  font-family: var(--font-body);
+  font-size: 14px;
+  width: 100%;
+  margin-top: 12px;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
 
-    #sidebar button {
-      background: #e8a33d;
-      color: #33281a;
-    }
+button:hover { background: #486350; }
+button:active { transform: scale(0.98); }
 
-    #sidebar button:hover {
-      background: #dd952b;
-    }
+.secondaryBtn {
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+}
 
-    .menuItem {
-      background: #34497a;
-      padding: 16px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      cursor: pointer;
-      font-size: 18px;
-      font-weight: bold;
-      color: #fdf6e8;
-      border: 1px solid #2b3c66;
-    }
+.secondaryBtn:hover { background: var(--surface-soft); }
 
-    .dropdownContent {
-      display: none;
-      margin-top: 10px;
-      background: #2b3c66;
-      border-radius: 10px;
-      padding: 10px;
-    }
+/* ---------- app layout ---------- */
+#app {
+  display: none;
+  min-height: 100vh;
+}
 
-    .dropdownContent input {
-      background: #fffef9;
-    }
+#sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 260px;
+  height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  padding: 24px 18px;
+  overflow-y: auto;
+}
 
-    /* MAIN CONTENT */
-    #mainContent {
-      margin-left: 280px;
-      padding: 30px;
-    }
+.sidebarTop {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
 
-    .appCard {
-      background: #fffdf7;
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 20px;
-      border: 1px solid #e3d5b8;
-      box-shadow: 0 6px 16px rgba(90, 68, 40, 0.10);
-    }
+.welcomeLabel {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
 
-    .appCard h1 {
-      color: #3f5a8a;
-      margin-top: 0;
-    }
+.logoutBtn {
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  margin-top: 0;
+  padding: 8px 12px;
+  font-size: 13px;
+  width: auto;
+}
 
-    /* TASK CARDS - "pinned note" style */
-    .task {
-      position: relative;
-      background: #fff9e6;
-      border: 1px solid #e8dcb8;
-      border-radius: 6px;
-      padding: 18px 18px 14px;
-      margin-bottom: 22px;
-      box-shadow: 0 4px 10px rgba(90, 68, 40, 0.15);
-      transform: rotate(-1deg);
-    }
+.logoutBtn:hover { background: var(--surface-soft); }
 
-    .task:nth-child(even) {
-      transform: rotate(1deg);
-      background: #f2f7ec;
-      border-color: #d7e6c9;
-    }
+.menu { display: flex; flex-direction: column; gap: 8px; }
 
-    .task:nth-child(3n) {
-      transform: rotate(-0.6deg);
-      background: #fdeee0;
-      border-color: #f0d3b0;
-    }
+.menuItem {
+  position: relative;
+  background: transparent;
+  padding: 12px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-    .task::before {
-      content: "";
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #e8a33d;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-      border: 2px solid #fffdf7;
-    }
+.menuItem:hover { background: var(--surface-soft); }
 
-    .task:nth-child(even)::before {
-      background: #8ba876;
-    }
+.menuIcon { font-size: 18px; line-height: 1; }
 
-    .task:nth-child(3n)::before {
-      background: #3f5a8a;
-    }
+.dropdownContent {
+  display: none;
+  margin-top: 8px;
+  background: var(--surface-soft);
+  border-radius: 10px;
+  padding: 12px;
+  width: 100%;
+}
 
-    .task h2 {
-      margin-top: 4px;
-      color: #3a2f24;
-      font-size: 20px;
-    }
+.dropdownContent input { margin-top: 0; }
 
-    .task p {
-      color: #6b5c46;
-      font-size: 14px;
-      margin: 4px 0;
-    }
+/* ---------- main content ---------- */
+#mainContent {
+  margin-left: 260px;
+  padding: 32px 40px 60px;
+}
 
-    .task.completed {
-      opacity: 0.75;
-    }
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 4px;
+}
 
-    .task .completeBtn {
-      background: #8ba876;
-      color: #fdf6e8;
-    }
+.statsStrip h1 { font-size: 28px; margin-bottom: 20px; }
 
-    .task .completeBtn:hover {
-      background: #7a9665;
-    }
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
 
-    .task h3 {
-      color: #4d7a3a;
-    }
+.statsGrid h3 {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
 
-    /* USERS / REQUESTS / CHAT MESSAGE ITEMS */
-    .message {
-      background: #fffdf7;
-      border: 1px solid #e3d5b8;
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 10px;
-      color: #3a2f24;
-    }
+.sectionHead { margin-bottom: 14px; }
 
-    .message .mainBtn {
-      background: #3f5a8a;
-      color: #fdf6e8;
-      margin-top: 8px;
-    }
+.taskGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
 
-    .message .mainBtn:hover {
-      background: #33487a;
-    }
+/* ---------- task cards (JS-generated) ---------- */
+.task {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--mustard);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
 
-    /* CHAT */
-    #chatToggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: #e8a33d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-      cursor: pointer;
-      z-index: 9999;
-      box-shadow: 0 4px 12px rgba(90, 68, 40, 0.3);
-    }
+.task:nth-child(3n+2) { border-left-color: var(--sage); }
+.task:nth-child(3n) { border-left-color: var(--brick); }
 
-    #chatWindow {
-      position: fixed;
-      bottom: 100px;
-      right: 20px;
-      width: 350px;
-      height: 500px;
-      background: #fffdf7;
-      border-radius: 16px;
-      border: 1px solid #e3d5b8;
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 9999;
-      box-shadow: 0 10px 30px rgba(90, 68, 40, 0.25);
-    }
+.task h2 {
+  font-size: 17px;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
 
-    #chatMessages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 15px;
-    }
+.task p {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 4px 0;
+  line-height: 1.5;
+}
+
+.task.completed {
+  opacity: 0.6;
+}
+
+.task h3 {
+  font-size: 13px;
+  color: var(--sage);
+  margin-top: 10px;
+}
+
+.task .completeBtn {
+  background: var(--sage);
+  color: #fff;
+  width: auto;
+  padding: 8px 14px;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+.task .completeBtn:hover { background: #486350; }
+
+/* ---------- users / requests / counters (JS-generated) ---------- */
+.message {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.message strong { font-weight: 600; }
+
+.message .mainBtn {
+  background: var(--mustard);
+  color: var(--ink);
+  width: auto;
+  padding: 8px 14px;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.message .mainBtn:hover { background: #c68f2f; }
+
+/* ---------- chat ---------- */
+#chatToggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--sage);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: var(--shadow);
+}
+
+#chatWindow {
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  width: 340px;
+  height: 460px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 999;
+  box-shadow: var(--shadow);
+}
+
+.chatHeader {
+  background: var(--sage);
+  color: #fff;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.chatClose { cursor: pointer; opacity: 0.85; }
+.chatClose:hover { opacity: 1; }
+
+#chatMessages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  background: var(--surface-soft);
+}
+
+#chatMessages .message { background: var(--surface); }
+
+.chatInputRow {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.chatInputRow input { margin-top: 0; flex: 1; }
+.chatInputRow button { width: auto; margin-top: 0; padding: 10px 16px; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 768px) {
+  #sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  #mainContent {
+    margin-left: 0;
+    padding: 24px 18px 60px;
+  }
+
+  #chatWindow {
+    width: calc(100vw - 32px);
+    right: 16px;
+  }
+}
   </style>
 </head>
 
@@ -308,25 +416,29 @@
 
   <!-- AUTH -->
   <div id="auth" class="container">
-    <h1 style="text-align:center;color:#3f5a8a;">🏠 Family Task App</h1>
+    <div class="brandMark">
+      <span class="brandIcon">&#8962;</span>
+      <h1>Family Task App</h1>
+      <p class="brandTag">Keep the household in sync</p>
+    </div>
 
     <!-- LOGIN -->
     <div id="loginBox" class="card">
-      <h2>Login</h2>
+      <h2>Log in</h2>
       <input id="loginUsername" placeholder="Username" />
       <input id="loginPassword" type="password" placeholder="Password" />
-      <button onclick="login()">Login</button>
-      <button class="secondaryBtn" onclick="showRegister()">Not Registered?</button>
+      <button onclick="login()">Log in</button>
+      <button class="secondaryBtn" onclick="showRegister()">Not registered?</button>
     </div>
 
     <!-- REGISTER -->
     <div id="registerBox" class="card hidden">
-      <h2>Create Account</h2>
+      <h2>Create account</h2>
       <input id="registerUsername" placeholder="Username" />
       <input id="registerEmail" type="email" placeholder="Email" />
       <input id="registerPassword" type="password" placeholder="Password" />
-      <button onclick="register()">Register</button>
-      <button class="secondaryBtn" onclick="showLogin()">Back To Login</button>
+      <button onclick="register()">Create account</button>
+      <button class="secondaryBtn" onclick="showLogin()">Back to log in</button>
     </div>
   </div>
 
@@ -335,58 +447,81 @@
 
     <!-- SIDEBAR -->
     <div id="sidebar">
-      <h1 id="welcomeUser"></h1>
-      <button onclick="logout()">Logout</button>
-
-      <!-- USERS -->
-      <div class="menuItem" onclick="toggleDropdown('usersDropdown')">
-        👨‍👩‍👧 Users
-        <div id="usersDropdown" class="dropdownContent" onclick="event.stopPropagation()">
-          <div id="usersList"></div>
-        </div>
+      <div class="sidebarTop">
+        <p id="welcomeUser" class="welcomeLabel"></p>
+        <button class="logoutBtn" onclick="logout()">Log out</button>
       </div>
 
-      <!-- REQUESTS -->
-      <div class="menuItem" onclick="toggleDropdown('requestsDropdown')">
-        🔔 Requests
-        <div id="requestsDropdown" class="dropdownContent" onclick="event.stopPropagation()">
-          <div id="notificationsList"></div>
+      <nav class="menu">
+        <!-- USERS -->
+        <div class="menuItem" onclick="toggleDropdown('usersDropdown')">
+          <span class="menuIcon">&#128101;</span>
+          <span class="menuLabel">Family</span>
+          <div id="usersDropdown" class="dropdownContent" onclick="event.stopPropagation()">
+            <div id="usersList"></div>
+          </div>
         </div>
-      </div>
 
-      <!-- TASKS -->
-      <div class="menuItem" onclick="toggleDropdown('tasksDropdown')">
-        📝 Tasks
-        <div id="tasksDropdown" onclick="event.stopPropagation()" class="dropdownContent">
-          <input id="taskInput" placeholder="Add new task" />
-          <button onclick="addTask()">Add Task</button>
-          <div id="taskList"></div>
+        <!-- REQUESTS -->
+        <div class="menuItem" onclick="toggleDropdown('requestsDropdown')">
+          <span class="menuIcon">&#128276;</span>
+          <span class="menuLabel">Requests</span>
+          <div id="requestsDropdown" class="dropdownContent" onclick="event.stopPropagation()">
+            <div id="notificationsList"></div>
+          </div>
         </div>
-      </div>
+
+        <!-- TASKS -->
+        <div class="menuItem" onclick="toggleDropdown('tasksDropdown')">
+          <span class="menuIcon">&#128221;</span>
+          <span class="menuLabel">Add task</span>
+          <div id="tasksDropdown" onclick="event.stopPropagation()" class="dropdownContent">
+            <input id="taskInput" placeholder="New task" />
+            <button onclick="addTask()">Add task</button>
+          </div>
+        </div>
+
+        <!-- SHARED COUNTERS -->
+        <div class="menuItem" onclick="toggleDropdown('countersDropdown')">
+          <span class="menuIcon">&#128279;</span>
+          <span class="menuLabel">Shared counters</span>
+          <div id="countersDropdown" class="dropdownContent" onclick="event.stopPropagation()">
+            <div id="sharedCountersList"></div>
+          </div>
+        </div>
+      </nav>
     </div>
 
     <!-- MAIN -->
     <div id="mainContent">
-      <div class="appCard">
-        <h1>📊 Daily Stats</h1>
-        <div id="statsList"></div>
+
+      <div class="statsStrip" id="statsStripHeader">
+        <p class="eyebrow">Today</p>
+        <h1>Daily stats</h1>
       </div>
+
+      <div id="statsList" class="statsGrid"></div>
+
+      <div class="sectionHead">
+        <p class="eyebrow">Tasks</p>
+      </div>
+      <div id="taskList" class="taskGrid"></div>
     </div>
   </div>
 
   <!-- CHAT -->
-  <div id="chatToggle">💬</div>
+  <div id="chatToggle" aria-label="Open family chat">&#128172;</div>
 
   <div id="chatWindow">
-    <div style="background:#3f5a8a; color:#fdf6e8; padding:15px; display:flex; justify-content:space-between;">
-      Family Chat
-      <span id="closeChat" style="cursor:pointer;">✖</span>
+    <div class="chatHeader">
+      <span>Family chat</span>
+      <span id="closeChat" class="chatClose">&#10005;</span>
     </div>
 
     <div id="chatMessages"></div>
 
-    <div style="padding:15px; border-top:1px solid #e3d5b8;">
-      <input id="chatInput" placeholder="Write message..." />
+    <div class="chatInputRow">
+      <input id="chatInput" placeholder="Write a message..." />
       <button onclick="sendMessage()">Send</button>
     </div>
   </div>
@@ -404,11 +539,9 @@
 
     function toggleDropdown(id) {
       const element = document.getElementById(id);
-      if (element.style.display === "block") {
-        element.style.display = "none";
-      } else {
-        element.style.display = "block";
-      }
+      const isOpen = element.style.display === "block";
+      document.querySelectorAll(".dropdownContent").forEach((el) => (el.style.display = "none"));
+      element.style.display = isOpen ? "none" : "block";
     }
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -417,7 +550,7 @@
       const closeChat = document.getElementById("closeChat");
 
       chatToggle.addEventListener("click", function () {
-        chatWindow.style.display = "flex";
+        chatWindow.style.display = chatWindow.style.display === "flex" ? "none" : "flex";
       });
 
       closeChat.addEventListener("click", function () {
