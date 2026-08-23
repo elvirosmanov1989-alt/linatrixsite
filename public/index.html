@@ -2,741 +2,429 @@
 <html lang="en">
 
 <head>
-
   <meta charset="UTF-8" />
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Family Task App</title>
-
-  <link
-    rel="manifest"
-    href="manifest.json"
-  />
-
-  <meta
-    name="theme-color"
-    content="#38bdf8"
-  />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#e8a33d" />
 
   <style>
-
     * {
       box-sizing: border-box;
     }
 
     body {
-
       margin: 0;
-
-      font-family: Arial, sans-serif;
-
-      background: #020617;
-
-      color: white;
-
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4ecdd;
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(139, 111, 71, 0.08) 1px, transparent 0);
+      background-size: 22px 22px;
+      color: #3a2f24;
     }
 
-
-
-
-
-
     /* AUTH */
-
     .container {
-
       max-width: 420px;
-
       margin: 60px auto;
-
     }
 
     .card {
-
-      background: #0f172a;
-
+      background: #fffdf7;
       padding: 30px;
-
-      border-radius: 24px;
-
-      border: 1px solid #1e293b;
-
+      border-radius: 16px;
+      border: 1px solid #e3d5b8;
+      box-shadow: 0 6px 16px rgba(90, 68, 40, 0.12);
       margin-bottom: 20px;
+    }
 
+    .card h1, .card h2 {
+      color: #3f5a8a;
     }
 
     input {
-
       width: 100%;
-
       padding: 14px;
-
-      border: none;
-
-      border-radius: 12px;
-
+      border: 1px solid #ddccaa;
+      border-radius: 10px;
       margin-top: 12px;
-
       margin-bottom: 12px;
-
       font-size: 16px;
-
+      background: #fffef9;
+      color: #3a2f24;
     }
 
     button {
-
       border: none;
-
-      border-radius: 12px;
-
+      border-radius: 10px;
       padding: 14px;
-
-      background: #22c55e;
-
-      color: white;
-
+      background: #e8a33d;
+      color: #3a2f24;
       cursor: pointer;
-
       font-weight: bold;
-
       width: 100%;
-
       margin-top: 10px;
+      transition: transform 0.1s ease, background 0.15s ease;
+    }
 
+    button:hover {
+      background: #dd952b;
+    }
+
+    button:active {
+      transform: scale(0.98);
     }
 
     .secondaryBtn {
+      background: #d9d1bd;
+      color: #3a2f24;
+    }
 
-      background: #334155;
-
+    .secondaryBtn:hover {
+      background: #cbc1a8;
     }
 
     .hidden {
-
       display: none;
-
     }
-
-
-
-
-
 
     /* APP LAYOUT */
-
     #app {
-
       display: none;
-
       min-height: 100vh;
-
     }
-
-
-
-
-
 
     /* SIDEBAR */
-
     #sidebar {
-
       position: fixed;
-
       left: 0;
-
       top: 0;
-
       width: 280px;
-
       height: 100vh;
-
-      background: #0f172a;
-
-      border-right: 1px solid #1e293b;
-
+      background: #3f5a8a;
+      border-right: 3px solid #334870;
       padding: 20px;
-
       overflow-y: auto;
-
+      color: #fdf6e8;
     }
-
-
-
-
-
 
     #sidebar h1 {
-
       text-align: center;
-
       margin-bottom: 30px;
-
+      color: #fdf6e8;
     }
 
+    #sidebar button {
+      background: #e8a33d;
+      color: #33281a;
+    }
 
-
-
-
+    #sidebar button:hover {
+      background: #dd952b;
+    }
 
     .menuItem {
-
-      background: #111827;
-
+      background: #34497a;
       padding: 16px;
-
-      border-radius: 14px;
-
+      border-radius: 12px;
       margin-bottom: 15px;
-
       cursor: pointer;
-
       font-size: 18px;
-
       font-weight: bold;
-
+      color: #fdf6e8;
+      border: 1px solid #2b3c66;
     }
-
-
-
-
-
 
     .dropdownContent {
-
       display: none;
-
       margin-top: 10px;
-
-      background: #020617;
-
-      border-radius: 12px;
-
+      background: #2b3c66;
+      border-radius: 10px;
       padding: 10px;
-
     }
 
-
-
-
-
+    .dropdownContent input {
+      background: #fffef9;
+    }
 
     /* MAIN CONTENT */
-
     #mainContent {
-
       margin-left: 280px;
-
       padding: 30px;
-
     }
-
-
-
-
-
 
     .appCard {
-
-      background: #0f172a;
-
+      background: #fffdf7;
       padding: 20px;
-
-      border-radius: 20px;
-
+      border-radius: 16px;
       margin-bottom: 20px;
-
-      border: 1px solid #1e293b;
-
+      border: 1px solid #e3d5b8;
+      box-shadow: 0 6px 16px rgba(90, 68, 40, 0.10);
     }
 
+    .appCard h1 {
+      color: #3f5a8a;
+      margin-top: 0;
+    }
 
+    /* TASK CARDS - "pinned note" style */
+    .task {
+      position: relative;
+      background: #fff9e6;
+      border: 1px solid #e8dcb8;
+      border-radius: 6px;
+      padding: 18px 18px 14px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 10px rgba(90, 68, 40, 0.15);
+      transform: rotate(-1deg);
+    }
 
+    .task:nth-child(even) {
+      transform: rotate(1deg);
+      background: #f2f7ec;
+      border-color: #d7e6c9;
+    }
 
+    .task:nth-child(3n) {
+      transform: rotate(-0.6deg);
+      background: #fdeee0;
+      border-color: #f0d3b0;
+    }
 
+    .task::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #e8a33d;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      border: 2px solid #fffdf7;
+    }
+
+    .task:nth-child(even)::before {
+      background: #8ba876;
+    }
+
+    .task:nth-child(3n)::before {
+      background: #3f5a8a;
+    }
+
+    .task h2 {
+      margin-top: 4px;
+      color: #3a2f24;
+      font-size: 20px;
+    }
+
+    .task p {
+      color: #6b5c46;
+      font-size: 14px;
+      margin: 4px 0;
+    }
+
+    .task.completed {
+      opacity: 0.75;
+    }
+
+    .task .completeBtn {
+      background: #8ba876;
+      color: #fdf6e8;
+    }
+
+    .task .completeBtn:hover {
+      background: #7a9665;
+    }
+
+    .task h3 {
+      color: #4d7a3a;
+    }
+
+    /* USERS / REQUESTS / CHAT MESSAGE ITEMS */
+    .message {
+      background: #fffdf7;
+      border: 1px solid #e3d5b8;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      color: #3a2f24;
+    }
+
+    .message .mainBtn {
+      background: #3f5a8a;
+      color: #fdf6e8;
+      margin-top: 8px;
+    }
+
+    .message .mainBtn:hover {
+      background: #33487a;
+    }
 
     /* CHAT */
-
     #chatToggle {
-
       position: fixed;
-
       bottom: 20px;
-
       right: 20px;
-
       width: 70px;
-
       height: 70px;
-
       border-radius: 50%;
-
-      background: #22c55e;
-
+      background: #e8a33d;
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
       font-size: 30px;
-
       cursor: pointer;
-
       z-index: 9999;
-
+      box-shadow: 0 4px 12px rgba(90, 68, 40, 0.3);
     }
-
-
-
-
-
 
     #chatWindow {
-
       position: fixed;
-
       bottom: 100px;
-
       right: 20px;
-
       width: 350px;
-
       height: 500px;
-
-      background: #0f172a;
-
-      border-radius: 20px;
-
-      border: 1px solid #1e293b;
-
+      background: #fffdf7;
+      border-radius: 16px;
+      border: 1px solid #e3d5b8;
       display: none;
-
       flex-direction: column;
-
       overflow: hidden;
-
       z-index: 9999;
-
+      box-shadow: 0 10px 30px rgba(90, 68, 40, 0.25);
     }
-
-
-
-
-
 
     #chatMessages {
-
       flex: 1;
-
       overflow-y: auto;
-
       padding: 15px;
-
     }
-
   </style>
-
 </head>
 
 <body>
 
-
-
-
-
   <!-- AUTH -->
-
-  <div
-    id="auth"
-    class="container"
-  >
-
-    <h1>🏠 Family Task App</h1>
-
-
-
-
+  <div id="auth" class="container">
+    <h1 style="text-align:center;color:#3f5a8a;">🏠 Family Task App</h1>
 
     <!-- LOGIN -->
-
-    <div
-      id="loginBox"
-      class="card"
-    >
-
+    <div id="loginBox" class="card">
       <h2>Login</h2>
-
-      <input
-        id="loginUsername"
-        placeholder="Username"
-      />
-
-      <input
-        id="loginPassword"
-        type="password"
-        placeholder="Password"
-      />
-
-      <button onclick="login()">
-        Login
-      </button>
-
-      <button
-        class="secondaryBtn"
-        onclick="showRegister()"
-      >
-        Not Registered?
-      </button>
-
+      <input id="loginUsername" placeholder="Username" />
+      <input id="loginPassword" type="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+      <button class="secondaryBtn" onclick="showRegister()">Not Registered?</button>
     </div>
-
-
-
-
 
     <!-- REGISTER -->
-
-    <div
-      id="registerBox"
-      class="card hidden"
-    >
-
+    <div id="registerBox" class="card hidden">
       <h2>Create Account</h2>
-
-      <input
-        id="registerUsername"
-        placeholder="Username"
-      />
-
-      <input
-        id="registerEmail"
-        type="email"
-        placeholder="Email"
-      />
-
-      <input
-        id="registerPassword"
-        type="password"
-        placeholder="Password"
-      />
-
-      <button onclick="register()">
-        Register
-      </button>
-
-      <button
-        class="secondaryBtn"
-        onclick="showLogin()"
-      >
-        Back To Login
-      </button>
-
+      <input id="registerUsername" placeholder="Username" />
+      <input id="registerEmail" type="email" placeholder="Email" />
+      <input id="registerPassword" type="password" placeholder="Password" />
+      <button onclick="register()">Register</button>
+      <button class="secondaryBtn" onclick="showLogin()">Back To Login</button>
     </div>
-
   </div>
-
-
-
-
-
-
 
   <!-- APP -->
-
   <div id="app">
 
-
-
-
-
     <!-- SIDEBAR -->
-
     <div id="sidebar">
-
       <h1 id="welcomeUser"></h1>
-
-      <button onclick="logout()">
-        Logout
-      </button>
-
-
-
-
+      <button onclick="logout()">Logout</button>
 
       <!-- USERS -->
-
-      <div
-        class="menuItem"
-        onclick="toggleDropdown('usersDropdown')"
-      >
-
+      <div class="menuItem" onclick="toggleDropdown('usersDropdown')">
         👨‍👩‍👧 Users
-
-        <div
-          id="usersDropdown"
-          class="dropdownContent"
-          onclick="event.stopPropagation()"
-        >
-
+        <div id="usersDropdown" class="dropdownContent" onclick="event.stopPropagation()">
           <div id="usersList"></div>
-
         </div>
-
       </div>
-
-
-
-
 
       <!-- REQUESTS -->
-
-      <div
-        class="menuItem"
-        onclick="toggleDropdown('requestsDropdown')"
-      >
-
+      <div class="menuItem" onclick="toggleDropdown('requestsDropdown')">
         🔔 Requests
-
-        <div
-          id="requestsDropdown"
-          class="dropdownContent"
-          onclick="event.stopPropagation()"
-        >
-
+        <div id="requestsDropdown" class="dropdownContent" onclick="event.stopPropagation()">
           <div id="notificationsList"></div>
-
         </div>
-
       </div>
-
-
-
-
 
       <!-- TASKS -->
-
-      <div
-        class="menuItem"
-        onclick="toggleDropdown('tasksDropdown')"
-      >
-
+      <div class="menuItem" onclick="toggleDropdown('tasksDropdown')">
         📝 Tasks
-
-        <div
-          id="tasksDropdown"
-          onclick="event.stopPropagation()"
-          class="dropdownContent"
-        >
-
-          <input
-            id="taskInput"
-            placeholder="Add new task"
-          />
-
-          <button onclick="addTask()">
-            Add Task
-          </button>
-
+        <div id="tasksDropdown" onclick="event.stopPropagation()" class="dropdownContent">
+          <input id="taskInput" placeholder="Add new task" />
+          <button onclick="addTask()">Add Task</button>
           <div id="taskList"></div>
-
         </div>
-
       </div>
-
     </div>
-
-
-
-
-
-
 
     <!-- MAIN -->
-
     <div id="mainContent">
-
       <div class="appCard">
-
         <h1>📊 Daily Stats</h1>
-
         <div id="statsList"></div>
-
       </div>
-
     </div>
-
   </div>
-
-
-
-
-
-
 
   <!-- CHAT -->
-
-  <div id="chatToggle">
-    💬
-  </div>
-
-
-
-
+  <div id="chatToggle">💬</div>
 
   <div id="chatWindow">
-
-    <div
-      style="
-        background:#111827;
-        padding:15px;
-        display:flex;
-        justify-content:space-between;
-      "
-    >
-
+    <div style="background:#3f5a8a; color:#fdf6e8; padding:15px; display:flex; justify-content:space-between;">
       Family Chat
-
-      <span
-        id="closeChat"
-        style="cursor:pointer;"
-      >
-        ✖
-      </span>
-
+      <span id="closeChat" style="cursor:pointer;">✖</span>
     </div>
-
-
-
-
 
     <div id="chatMessages"></div>
 
-
-
-
-
-    <div
-      style="
-        padding:15px;
-        border-top:1px solid #1e293b;
-      "
-    >
-
-      <input
-        id="chatInput"
-        placeholder="Write message..."
-      />
-
-      <button onclick="sendMessage()">
-        Send
-      </button>
-
+    <div style="padding:15px; border-top:1px solid #e3d5b8;">
+      <input id="chatInput" placeholder="Write message..." />
+      <button onclick="sendMessage()">Send</button>
     </div>
-
   </div>
 
-
-
-
-
-
-
   <script>
-
     function showRegister() {
-
       document.getElementById("loginBox").classList.add("hidden");
-
       document.getElementById("registerBox").classList.remove("hidden");
-
     }
-
-
 
     function showLogin() {
-
       document.getElementById("registerBox").classList.add("hidden");
-
       document.getElementById("loginBox").classList.remove("hidden");
-
     }
-
-
-
-
-
 
     function toggleDropdown(id) {
-
-      const element =
-        document.getElementById(id);
-
-
-
-      if (
-
-        element.style.display === "block"
-
-      ) {
-
+      const element = document.getElementById(id);
+      if (element.style.display === "block") {
         element.style.display = "none";
-
-      }
-
-      else {
-
+      } else {
         element.style.display = "block";
-
       }
-
     }
 
-
-
-
-
-
     document.addEventListener("DOMContentLoaded", function () {
-
-      const chatToggle =
-        document.getElementById("chatToggle");
-
-      const chatWindow =
-        document.getElementById("chatWindow");
-
-      const closeChat =
-        document.getElementById("closeChat");
-
-
+      const chatToggle = document.getElementById("chatToggle");
+      const chatWindow = document.getElementById("chatWindow");
+      const closeChat = document.getElementById("closeChat");
 
       chatToggle.addEventListener("click", function () {
-
         chatWindow.style.display = "flex";
-
       });
-
-
 
       closeChat.addEventListener("click", function () {
-
         chatWindow.style.display = "none";
-
       });
-
     });
-
   </script>
-
-
-
-
-
-
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
   <script>
@@ -744,46 +432,13 @@
   </script>
 
   <!-- JS -->
-
-  <script
-    type="module"
-  ></script>
-
-  <script
-    type="module"
-    src="./js/auth.js"
-  ></script>
-
-  <script
-    type="module"
-    src="./js/profiles.js"
-  ></script>
-
-  <script
-    type="module"
-    src="./js/requests.js"
-  ></script>
-
-  <script
-    type="module"
-    src="./js/tasks.js"
-  ></script>
-
-  <script
-    type="module"
-    src="./js/chat.js"
-  ></script>
-
-  <script
-    type="module"
-    src="./js/counters.js"
-  ></script>
-
-  <script
-    type="module"
-    src="./js/ui.js"
-  ></script>
+  <script type="module" src="./js/auth.js"></script>
+  <script type="module" src="./js/profiles.js"></script>
+  <script type="module" src="./js/requests.js"></script>
+  <script type="module" src="./js/tasks.js"></script>
+  <script type="module" src="./js/chat.js"></script>
+  <script type="module" src="./js/counters.js"></script>
+  <script type="module" src="./js/ui.js"></script>
 
 </body>
-
 </html>
