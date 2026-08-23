@@ -1,3 +1,4 @@
+cat > public/index.html <<'EOF'
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,389 +8,711 @@
   <title>Family Task App</title>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#55735A" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
 
   <style>
-:root {
-  --bg: #faf3e4;
-  --surface: #ffffff;
-  --surface-soft: #f3ecdb;
-  --ink: #2e2a22;
-  --ink-soft: #6b6354;
-  --sage: #55735a;
-  --sage-light: #e4ece0;
-  --mustard: #d9a23b;
-  --mustard-light: #f7e8c9;
-  --brick: #b4593a;
-  --brick-light: #f6e2d9;
-  --line: rgba(46, 42, 34, 0.12);
-  --shadow: 0 6px 20px rgba(46, 42, 34, 0.08);
-  --radius: 14px;
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Inter', 'Segoe UI', Arial, sans-serif;
-}
+    :root {
+      --bg: #faf3e4;
+      --surface: #ffffff;
+      --surface-soft: #f3ecdb;
+      --ink: #2e2a22;
+      --ink-soft: #6b6354;
+      --sage: #55735a;
+      --sage-light: #e4ece0;
+      --mustard: #d9a23b;
+      --mustard-light: #f7e8c9;
+      --brick: #b4593a;
+      --brick-light: #f6e2d9;
+      --line: rgba(46, 42, 34, 0.12);
+      --shadow: 0 6px 20px rgba(46, 42, 34, 0.08);
+      --radius: 14px;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Inter', 'Segoe UI', Arial, sans-serif;
+    }
 
-* { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  font-family: var(--font-body);
-  background: var(--bg);
-  color: var(--ink);
-}
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
+    }
 
-h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; }
-p { margin: 0; }
+    h1,
+    h2,
+    h3 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      margin: 0;
+    }
 
-.hidden { display: none; }
+    p {
+      margin: 0;
+    }
 
-.emptyHint {
-  font-size: 13px;
-  color: var(--ink-soft);
-  padding: 8px 2px;
-}
+    .hidden {
+      display: none;
+    }
 
-/* ---------- auth ---------- */
-.container {
-  max-width: 420px;
-  margin: 64px auto;
-  padding: 0 20px;
-}
+    .emptyHint {
+      font-size: 13px;
+      color: var(--ink-soft);
+      padding: 8px 2px;
+    }
 
-.brandMark { text-align: center; margin-bottom: 28px; }
+    /* ---------- auth ---------- */
 
-.brandIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
-  background: var(--sage-light);
-  color: var(--sage);
-  font-size: 26px;
-  margin-bottom: 12px;
-}
+    .container {
+      max-width: 420px;
+      margin: 64px auto;
+      padding: 0 20px;
+    }
 
-.brandMark h1 { font-size: 26px; color: var(--ink); }
-.brandTag { font-size: 14px; color: var(--ink-soft); margin-top: 6px; }
+    .brandMark {
+      text-align: center;
+      margin-bottom: 28px;
+    }
 
-.card {
-  background: var(--surface);
-  padding: 28px;
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  margin-bottom: 20px;
-}
+    .brandIcon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: var(--sage-light);
+      color: var(--sage);
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
 
-.card h2 { font-size: 20px; margin-bottom: 4px; }
+    .brandMark h1 {
+      font-size: 26px;
+      color: var(--ink);
+    }
 
-input, select {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  margin-top: 12px;
-  font-size: 15px;
-  font-family: var(--font-body);
-  background: var(--surface);
-  color: var(--ink);
-}
+    .brandTag {
+      font-size: 14px;
+      color: var(--ink-soft);
+      margin-top: 6px;
+    }
 
-input:focus, select:focus {
-  outline: none;
-  border-color: var(--sage);
-  box-shadow: 0 0 0 3px var(--sage-light);
-}
+    .card {
+      background: var(--surface);
+      padding: 28px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
 
-button {
-  border: none;
-  border-radius: 10px;
-  padding: 12px 16px;
-  background: var(--sage);
-  color: #fff;
-  cursor: pointer;
-  font-weight: 500;
-  font-family: var(--font-body);
-  font-size: 14px;
-  width: 100%;
-  margin-top: 12px;
-  transition: transform 0.1s ease, background 0.15s ease;
-}
+    .card h2 {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
 
-button:hover { background: #486350; }
-button:active { transform: scale(0.98); }
+    input,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin-top: 12px;
+      font-size: 15px;
+      font-family: var(--font-body);
+      background: var(--surface);
+      color: var(--ink);
+    }
 
-.secondaryBtn {
-  background: transparent;
-  color: var(--ink-soft);
-  border: 1px solid var(--line);
-}
-.secondaryBtn:hover { background: var(--surface-soft); }
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px var(--sage-light);
+    }
 
-/* ---------- app layout ---------- */
-#app { display: none; min-height: 100vh; }
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      background: var(--sage);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 500;
+      font-family: var(--font-body);
+      font-size: 14px;
+      width: 100%;
+      margin-top: 12px;
+      transition: transform 0.1s ease, background 0.15s ease;
+    }
 
-/* ---------- onboarding ---------- */
-#onboarding {
-  max-width: 460px;
-  margin: 80px auto;
-  padding: 0 20px;
-  text-align: center;
-}
+    button:hover {
+      background: #486350;
+    }
 
-#onboarding .brandIcon { margin: 0 auto 16px; }
-#onboarding h1 { font-size: 26px; margin-bottom: 8px; }
-#onboarding p.lead { color: var(--ink-soft); font-size: 15px; margin-bottom: 24px; }
+    button:active {
+      transform: scale(0.98);
+    }
 
-#mainAppContent { display: none; min-height: 100vh; }
+    .secondaryBtn {
+      background: transparent;
+      color: var(--ink-soft);
+      border: 1px solid var(--line);
+    }
 
-#sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 260px;
-  height: 100vh;
-  background: var(--surface);
-  border-right: 1px solid var(--line);
-  padding: 24px 18px;
-  overflow-y: auto;
-}
+    .secondaryBtn:hover {
+      background: var(--surface-soft);
+    }
 
-.sidebarTop { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
-.welcomeLabel { font-family: var(--font-display); font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+    /* ---------- app layout ---------- */
 
-.logoutBtn {
-  background: transparent;
-  color: var(--ink-soft);
-  border: 1px solid var(--line);
-  margin-top: 0;
-  padding: 8px 12px;
-  font-size: 13px;
-  width: auto;
-}
-.logoutBtn:hover { background: var(--surface-soft); }
+    #app {
+      display: none;
+      min-height: 100vh;
+    }
 
-.menu { display: flex; flex-direction: column; gap: 8px; }
+    /* ---------- onboarding ---------- */
 
-.menuItem {
-  position: relative;
-  background: transparent;
-  padding: 12px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--ink);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.menuItem:hover { background: var(--surface-soft); }
-.menuIcon { font-size: 18px; line-height: 1; }
+    #onboarding {
+      max-width: 460px;
+      margin: 80px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
 
-.dropdownContent {
-  display: none;
-  margin-top: 8px;
-  background: var(--surface-soft);
-  border-radius: 10px;
-  padding: 12px;
-  width: 100%;
-}
-.dropdownContent input, .dropdownContent select { margin-top: 0; }
-.dropdownContent .subLabel {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  margin: 14px 0 6px;
-}
-.dropdownContent .subLabel:first-child { margin-top: 0; }
+    #onboarding .brandIcon {
+      margin: 0 auto 16px;
+    }
 
-.familyCard {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 10px 12px;
-  margin-bottom: 8px;
-}
-.familyCardName { font-weight: 600; font-size: 14px; }
-.familyCardMembers { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+    #onboarding h1 {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
 
-/* ---------- main content ---------- */
-#mainContent { margin-left: 260px; padding: 32px 40px 60px; }
+    #onboarding p.lead {
+      color: var(--ink-soft);
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
 
-.eyebrow {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--sage);
-  margin-bottom: 4px;
-}
+    #mainAppContent {
+      display: none;
+      min-height: 100vh;
+    }
 
-.statsStrip h1 { font-size: 28px; margin-bottom: 20px; }
+    #sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 260px;
+      height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--line);
+      padding: 24px 18px;
+      overflow-y: auto;
+      z-index: 100;
+    }
 
-.statsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-  margin-bottom: 32px;
-}
-.statsGrid h3 {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 16px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ink);
-}
+    .sidebarTop {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
 
-.sectionHead { margin-bottom: 14px; }
+    .welcomeLabel {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
 
-.taskGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-}
+    .logoutBtn {
+      background: transparent;
+      color: var(--ink-soft);
+      border: 1px solid var(--line);
+      margin-top: 0;
+      padding: 8px 12px;
+      font-size: 13px;
+      width: auto;
+    }
 
-/* ---------- task cards (JS-generated) ---------- */
-.task {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--mustard);
-  border-radius: var(--radius);
-  padding: 18px 20px;
-  box-shadow: var(--shadow);
-}
-.task:nth-child(3n+2) { border-left-color: var(--sage); }
-.task:nth-child(3n) { border-left-color: var(--brick); }
+    .logoutBtn:hover {
+      background: var(--surface-soft);
+    }
 
-.taskFamilyTag {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--sage);
-  margin-bottom: 6px;
-}
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-.task h2 { font-size: 17px; margin-bottom: 10px; color: var(--ink); }
-.task p { font-size: 13px; color: var(--ink-soft); margin: 4px 0; line-height: 1.5; }
-.task.completed { opacity: 0.6; }
-.task h3 { font-size: 13px; color: var(--sage); margin-top: 10px; }
+    .menuItem {
+      position: relative;
+      background: transparent;
+      padding: 12px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-.task .completeBtn {
-  background: var(--sage);
-  color: #fff;
-  width: auto;
-  padding: 8px 14px;
-  font-size: 13px;
-  margin-top: 12px;
-}
-.task .completeBtn:hover { background: #486350; }
+    .menuItem:hover {
+      background: var(--surface-soft);
+    }
 
-/* ---------- users / requests / counters (JS-generated) ---------- */
-.message {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px 14px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  color: var(--ink);
-}
-.message strong { font-weight: 600; }
-.message .mainBtn {
-  background: var(--mustard);
-  color: var(--ink);
-  width: auto;
-  padding: 8px 14px;
-  font-size: 13px;
-  margin-top: 10px;
-}
-.message .mainBtn:hover { background: #c68f2f; }
+    .menuIcon {
+      font-size: 18px;
+      line-height: 1;
+    }
 
-/* ---------- suggested tasks ---------- */
-.suggestionChip {
-  display: inline-block;
-  width: auto;
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 6px 12px;
-  font-size: 12px;
-  margin: 0 6px 6px 0;
-}
-.suggestionChip:hover { background: var(--sage-light); border-color: var(--sage); }
+    .dropdownContent {
+      display: none;
+      margin-top: 8px;
+      background: var(--surface-soft);
+      border-radius: 10px;
+      padding: 12px;
+      width: 100%;
+    }
 
-/* ---------- chat ---------- */
-#chatToggle {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: var(--sage);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 999;
-  box-shadow: var(--shadow);
-}
+    .dropdownContent input,
+    .dropdownContent select {
+      margin-top: 0;
+    }
 
-#chatWindow {
-  position: fixed;
-  bottom: 96px;
-  right: 24px;
-  width: 340px;
-  height: 460px;
-  background: var(--surface);
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  z-index: 999;
-  box-shadow: var(--shadow);
-}
+    .dropdownContent .subLabel {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin: 14px 0 6px;
+    }
 
-.chatHeader {
-  background: var(--sage);
-  color: #fff;
-  padding: 14px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 500;
-  font-size: 14px;
-}
-.chatClose { cursor: pointer; opacity: 0.85; }
-.chatClose:hover { opacity: 1; }
+    .dropdownContent .subLabel:first-child {
+      margin-top: 0;
+    }
 
-#chatMessages { flex: 1; overflow-y: auto; padding: 14px; background: var(--surface-soft); }
-#chatMessages .message { background: var(--surface); }
+    .familyCard {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.15s ease;
+    }
 
-.chatInputRow { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); }
-.chatInputRow input { margin-top: 0; flex: 1; }
-.chatInputRow button { width: auto; margin-top: 0; padding: 10px 16px; }
+    .familyCard:hover {
+      border-color: var(--sage);
+      transform: translateY(-1px);
+    }
 
-/* ---------- responsive ---------- */
-@media (max-width: 768px) {
-  #sidebar { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--line); }
-  #mainContent { margin-left: 0; padding: 24px 18px 60px; }
-  #chatWindow { width: calc(100vw - 32px); right: 16px; }
-}
+    .familyCardName {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .familyCardMembers {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin-top: 2px;
+    }
+
+    /* ---------- main content ---------- */
+
+    #mainContent {
+      margin-left: 260px;
+      padding: 32px 40px 60px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 4px;
+    }
+
+    .statsStrip h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .statsGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .statsGrid h3 {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .sectionHead {
+      margin-bottom: 14px;
+    }
+
+    .taskGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    /* ---------- family view ---------- */
+
+    #familyView {
+      display: none;
+      margin-left: 260px;
+      padding: 32px 40px 60px;
+    }
+
+    .familyViewHeader {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .familyViewTitle {
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    .familyViewMembers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .familyMember {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: var(--sage-light);
+      color: var(--sage);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .backFamilyBtn {
+      width: auto;
+      margin-top: 0;
+      background: transparent;
+      color: var(--ink-soft);
+      border: 1px solid var(--line);
+      white-space: nowrap;
+    }
+
+    .backFamilyBtn:hover {
+      background: var(--surface-soft);
+    }
+
+    .familyTaskAdd {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .familyTaskAdd h2 {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .familyTaskAdd p {
+      color: var(--ink-soft);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .familyTaskInputRow {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .familyTaskInputRow input {
+      flex: 1;
+      margin-top: 0;
+    }
+
+    .familyTaskInputRow button {
+      width: auto;
+      margin-top: 0;
+      white-space: nowrap;
+    }
+
+    .familySuggestions {
+      margin-top: 14px;
+    }
+
+    .familySuggestionsLabel {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+
+    .suggestionChip {
+      display: inline-block;
+      width: auto;
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      margin: 0 6px 6px 0;
+    }
+
+    .suggestionChip:hover {
+      background: var(--sage-light);
+      border-color: var(--sage);
+    }
+
+    /* ---------- task cards ---------- */
+
+    .task {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--mustard);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .task:nth-child(3n+2) {
+      border-left-color: var(--sage);
+    }
+
+    .task:nth-child(3n) {
+      border-left-color: var(--brick);
+    }
+
+    .taskFamilyTag {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--sage);
+      margin-bottom: 6px;
+    }
+
+    .task h2 {
+      font-size: 17px;
+      margin-bottom: 10px;
+      color: var(--ink);
+    }
+
+    .task p {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin: 4px 0;
+      line-height: 1.5;
+    }
+
+    .task.completed {
+      opacity: 0.6;
+    }
+
+    .task h3 {
+      font-size: 13px;
+      color: var(--sage);
+      margin-top: 10px;
+    }
+
+    .task .completeBtn {
+      background: var(--sage);
+      color: #fff;
+      width: auto;
+      padding: 8px 14px;
+      font-size: 13px;
+      margin-top: 12px;
+    }
+
+    .task .completeBtn:hover {
+      background: #486350;
+    }
+
+    /* ---------- users / requests / counters ---------- */
+
+    .message {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .message strong {
+      font-weight: 600;
+    }
+
+    .message .mainBtn {
+      background: var(--mustard);
+      color: var(--ink);
+      width: auto;
+      padding: 8px 14px;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .message .mainBtn:hover {
+      background: #c68f2f;
+    }
+
+    /* ---------- chat ---------- */
+
+    #chatToggle {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--sage);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: var(--shadow);
+    }
+
+    #chatWindow {
+      position: fixed;
+      bottom: 96px;
+      right: 24px;
+      width: 340px;
+      height: 460px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 999;
+      box-shadow: var(--shadow);
+    }
+
+    .chatHeader {
+      background: var(--sage);
+      color: #fff;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .chatClose {
+      cursor: pointer;
+      opacity: 0.85;
+    }
+
+    .chatClose:hover {
+      opacity: 1;
+    }
+
+    #chatMessages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      background: var(--surface-soft);
+    }
+
+    #chatMessages .message {
+      background: var(--surface);
+    }
+
+    .chatInputRow {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .chatInputRow input {
+      margin-top: 0;
+      flex: 1;
+    }
+
+    .chatInputRow button {
+      width: auto;
+      margin-top: 0;
+      padding: 10px 16px;
+    }
+
+    /* ---------- responsive ---------- */
+
+    @media (max-width: 768px) {
+      #sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      #mainContent,
+      #familyView {
+        margin-left: 0;
+        padding: 24px 18px 60px;
+      }
+
+      .familyViewHeader {
+        flex-direction: column;
+      }
+
+      .familyTaskInputRow {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .familyTaskInputRow button {
+        width: 100%;
+      }
+
+      #chatWindow {
+        width: calc(100vw - 32px);
+        right: 16px;
+      }
+    }
   </style>
 </head>
 
@@ -397,6 +720,7 @@ button:active { transform: scale(0.98); }
 
   <!-- AUTH -->
   <div id="auth" class="container">
+
     <div class="brandMark">
       <span class="brandIcon">&#8962;</span>
       <h1>Family Task App</h1>
@@ -405,178 +729,923 @@ button:active { transform: scale(0.98); }
 
     <div id="loginBox" class="card">
       <h2>Log in</h2>
+
       <input id="loginUsername" placeholder="Username" />
       <input id="loginPassword" type="password" placeholder="Password" />
+
       <button onclick="login()">Log in</button>
       <button class="secondaryBtn" onclick="showRegister()">Not registered?</button>
     </div>
 
     <div id="registerBox" class="card hidden">
       <h2>Create account</h2>
+
       <input id="registerUsername" placeholder="Username" />
       <input id="registerEmail" type="email" placeholder="Email" />
       <input id="registerPassword" type="password" placeholder="Password" />
+
       <button onclick="register()">Create account</button>
       <button class="secondaryBtn" onclick="showLogin()">Back to log in</button>
     </div>
+
   </div>
 
   <!-- APP -->
   <div id="app">
 
-    <!-- ONBOARDING: shown when the user belongs to no families -->
+    <!-- ONBOARDING -->
     <div id="onboarding">
+
       <span class="brandIcon">&#8962;</span>
+
       <h1>Start your family</h1>
-      <p class="lead">Create a family, then invite the people you share tasks with.</p>
+
+      <p class="lead">
+        Create a family, then invite the people you share tasks with.
+      </p>
+
       <div class="card">
-        <input id="onboardingFamilyNameInput" placeholder="Family name, e.g. The Nowaks" />
-        <button onclick="createFamily('onboardingFamilyNameInput')">Create family</button>
+
+        <input
+          id="onboardingFamilyNameInput"
+          placeholder="Family name, e.g. The Nowaks"
+        />
+
+        <button onclick="createFamily('onboardingFamilyNameInput')">
+          Create family
+        </button>
+
       </div>
-      <p class="lead" style="font-size:13px;">Already invited to one? Ask them to send the invite, then check <strong>Requests</strong> in the sidebar once you're in.</p>
+
+      <p class="lead" style="font-size:13px;">
+        Already invited to one? Ask them to send the invite, then check
+        <strong>Requests</strong> in the sidebar once you're in.
+      </p>
+
     </div>
 
     <div id="mainAppContent">
+
       <!-- SIDEBAR -->
       <div id="sidebar">
+
         <div class="sidebarTop">
+
           <p id="welcomeUser" class="welcomeLabel"></p>
-          <button class="logoutBtn" onclick="logout()">Log out</button>
+
+          <button class="logoutBtn" onclick="logout()">
+            Log out
+          </button>
+
         </div>
 
         <nav class="menu">
-          <!-- FAMILY: existing families, create another, search & invite -->
-          <div class="menuItem" onclick="toggleDropdown('usersDropdown')">
+
+          <!-- FAMILY -->
+          <div
+            class="menuItem"
+            onclick="toggleDropdown('usersDropdown')"
+          >
+
             <span class="menuIcon">&#128101;</span>
             <span class="menuLabel">Family</span>
-            <div id="usersDropdown" class="dropdownContent" onclick="event.stopPropagation()">
+
+            <div
+              id="usersDropdown"
+              class="dropdownContent"
+              onclick="event.stopPropagation()"
+            >
+
               <p class="subLabel">Your families</p>
+
               <div id="familiesList"></div>
 
               <p class="subLabel">Create another</p>
-              <input id="sidebarFamilyNameInput" placeholder="Family name" />
-              <button onclick="createFamily('sidebarFamilyNameInput')">Create family</button>
+
+              <input
+                id="sidebarFamilyNameInput"
+                placeholder="Family name"
+              />
+
+              <button onclick="createFamily('sidebarFamilyNameInput')">
+                Create family
+              </button>
 
               <p class="subLabel">Invite someone</p>
-              <select id="inviteFamilySelect" style="display:none;"></select>
-              <input id="inviteSearchInput" placeholder="Search by username" oninput="onInviteSearchInput()" />
+
+              <select
+                id="inviteFamilySelect"
+                style="display:none;"
+              ></select>
+
+              <input
+                id="inviteSearchInput"
+                placeholder="Search by username"
+                oninput="onInviteSearchInput()"
+              />
+
               <div id="inviteResults"></div>
+
             </div>
           </div>
 
           <!-- REQUESTS -->
-          <div class="menuItem" onclick="toggleDropdown('requestsDropdown')">
+          <div
+            class="menuItem"
+            onclick="toggleDropdown('requestsDropdown')"
+          >
+
             <span class="menuIcon">&#128276;</span>
             <span class="menuLabel">Requests</span>
-            <div id="requestsDropdown" class="dropdownContent" onclick="event.stopPropagation()">
+
+            <div
+              id="requestsDropdown"
+              class="dropdownContent"
+              onclick="event.stopPropagation()"
+            >
               <div id="notificationsList"></div>
             </div>
+
           </div>
 
           <!-- TASKS -->
-          <div class="menuItem" onclick="toggleDropdown('tasksDropdown')">
+          <div
+            class="menuItem"
+            onclick="toggleDropdown('tasksDropdown')"
+          >
+
             <span class="menuIcon">&#128221;</span>
             <span class="menuLabel">Add task</span>
-            <div id="tasksDropdown" onclick="event.stopPropagation()" class="dropdownContent">
-              <select id="taskFamilySelect" style="display:none;"></select>
-              <input id="taskInput" placeholder="New task" />
-              <button onclick="addTask()">Add task</button>
-              <p class="subLabel">Or pick a suggestion</p>
+
+            <div
+              id="tasksDropdown"
+              onclick="event.stopPropagation()"
+              class="dropdownContent"
+            >
+
+              <select
+                id="taskFamilySelect"
+                style="display:none;"
+              ></select>
+
+              <input
+                id="taskInput"
+                placeholder="New task"
+              />
+
+              <button onclick="addTask()">
+                Add task
+              </button>
+
+              <p class="subLabel">
+                Or pick a suggestion
+              </p>
+
               <div id="suggestedTasksList"></div>
+
             </div>
+
           </div>
 
           <!-- SHARED COUNTERS -->
-          <div class="menuItem" onclick="toggleDropdown('countersDropdown')">
+          <div
+            class="menuItem"
+            onclick="toggleDropdown('countersDropdown')"
+          >
+
             <span class="menuIcon">&#128279;</span>
             <span class="menuLabel">Shared counters</span>
-            <div id="countersDropdown" class="dropdownContent" onclick="event.stopPropagation()">
+
+            <div
+              id="countersDropdown"
+              class="dropdownContent"
+              onclick="event.stopPropagation()"
+            >
               <div id="sharedCountersList"></div>
             </div>
+
           </div>
+
         </nav>
+
       </div>
 
-      <!-- MAIN -->
+      <!-- MAIN DASHBOARD -->
       <div id="mainContent">
+
         <div class="statsStrip">
+
           <p class="eyebrow">Today</p>
+
           <h1>Daily stats</h1>
+
         </div>
 
-        <div id="statsList" class="statsGrid"></div>
+        <div
+          id="statsList"
+          class="statsGrid"
+        ></div>
 
         <div class="sectionHead">
+
           <p class="eyebrow">Tasks</p>
+
         </div>
-        <div id="taskList" class="taskGrid"></div>
+
+        <div
+          id="taskList"
+          class="taskGrid"
+        ></div>
+
       </div>
+
+      <!-- FAMILY VIEW -->
+      <div id="familyView">
+
+        <div class="familyViewHeader">
+
+          <div>
+
+            <p class="eyebrow">
+              Family
+            </p>
+
+            <h1
+              id="familyViewName"
+              class="familyViewTitle"
+            ></h1>
+
+            <div
+              id="familyViewMembers"
+              class="familyViewMembers"
+            ></div>
+
+          </div>
+
+          <button
+            class="backFamilyBtn"
+            onclick="closeFamily()"
+          >
+            ← Back to dashboard
+          </button>
+
+        </div>
+
+        <!-- ADD TASK -->
+        <div class="familyTaskAdd">
+
+          <h2>Add a family task</h2>
+
+          <p>
+            This task will be added directly to this family.
+          </p>
+
+          <div class="familyTaskInputRow">
+
+            <input
+              id="familyTaskInput"
+              placeholder="What needs to be done?"
+              onkeydown="if(event.key === 'Enter') addFamilyTask()"
+            />
+
+            <button onclick="addFamilyTask()">
+              Add task
+            </button>
+
+          </div>
+
+          <div class="familySuggestions">
+
+            <div class="familySuggestionsLabel">
+              Suggestions
+            </div>
+
+            <button
+              type="button"
+              class="suggestionChip"
+              onclick="addFamilyTaskSuggestion('Take out the trash')"
+            >
+              Take out the trash
+            </button>
+
+            <button
+              type="button"
+              class="suggestionChip"
+              onclick="addFamilyTaskSuggestion('Walk the dog')"
+            >
+              Walk the dog
+            </button>
+
+            <button
+              type="button"
+              class="suggestionChip"
+              onclick="addFamilyTaskSuggestion('Do the dishes')"
+            >
+              Do the dishes
+            </button>
+
+            <button
+              type="button"
+              class="suggestionChip"
+              onclick="addFamilyTaskSuggestion('Vacuum the living room')"
+            >
+              Vacuum the living room
+            </button>
+
+            <button
+              type="button"
+              class="suggestionChip"
+              onclick="addFamilyTaskSuggestion('Water the plants')"
+            >
+              Water the plants
+            </button>
+
+            <button
+              type="button"
+              class="suggestionChip"
+              onclick="addFamilyTaskSuggestion('Grocery shopping')"
+            >
+              Grocery shopping
+            </button>
+
+            <button
+              type="button"
+              class="suggestionChip"
+              onclick="addFamilyTaskSuggestion('Laundry')"
+            >
+              Laundry
+            </button>
+
+            <button
+              type="button"
+              class="suggestionChip"
+              onclick="addFamilyTaskSuggestion('Clean the bathroom')"
+            >
+              Clean the bathroom
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="sectionHead">
+
+          <p class="eyebrow">
+            Tasks
+          </p>
+
+        </div>
+
+        <div
+          id="familyTaskList"
+          class="taskGrid"
+        ></div>
+
+      </div>
+
     </div>
+
   </div>
 
   <!-- CHAT -->
-  <div id="chatToggle" aria-label="Open family chat">&#128172;</div>
+
+  <div
+    id="chatToggle"
+    aria-label="Open family chat"
+  >
+    &#128172;
+  </div>
 
   <div id="chatWindow">
+
     <div class="chatHeader">
+
       <span>Family chat</span>
-      <span id="closeChat" class="chatClose">&#10005;</span>
+
+      <span
+        id="closeChat"
+        class="chatClose"
+      >
+        &#10005;
+      </span>
+
     </div>
+
     <div id="chatMessages"></div>
+
     <div class="chatInputRow">
-      <input id="chatInput" placeholder="Write a message..." />
-      <button onclick="sendMessage()">Send</button>
+
+      <input
+        id="chatInput"
+        placeholder="Write a message..."
+      />
+
+      <button onclick="sendMessage()">
+        Send
+      </button>
+
     </div>
+
   </div>
 
   <script>
+
     function showRegister() {
-      document.getElementById("loginBox").classList.add("hidden");
-      document.getElementById("registerBox").classList.remove("hidden");
+      document
+        .getElementById("loginBox")
+        .classList.add("hidden");
+
+      document
+        .getElementById("registerBox")
+        .classList.remove("hidden");
     }
 
     function showLogin() {
-      document.getElementById("registerBox").classList.add("hidden");
-      document.getElementById("loginBox").classList.remove("hidden");
+      document
+        .getElementById("registerBox")
+        .classList.add("hidden");
+
+      document
+        .getElementById("loginBox")
+        .classList.remove("hidden");
     }
 
     function toggleDropdown(id) {
-      const element = document.getElementById(id);
-      const isOpen = element.style.display === "block";
-      document.querySelectorAll(".dropdownContent").forEach((el) => (el.style.display = "none"));
-      element.style.display = isOpen ? "none" : "block";
+
+      const element =
+        document.getElementById(id);
+
+      const isOpen =
+        element.style.display === "block";
+
+      document
+        .querySelectorAll(".dropdownContent")
+        .forEach((el) => {
+          el.style.display = "none";
+        });
+
+      element.style.display =
+        isOpen ? "none" : "block";
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      const chatToggle = document.getElementById("chatToggle");
-      const chatWindow = document.getElementById("chatWindow");
-      const closeChat = document.getElementById("closeChat");
+    /*
+     * FAMILY VIEW
+     */
 
-      chatToggle.addEventListener("click", function () {
-        chatWindow.style.display = chatWindow.style.display === "flex" ? "none" : "flex";
-      });
+    window.openFamilyView = async function (familyId) {
 
-      closeChat.addEventListener("click", function () {
-        chatWindow.style.display = "none";
-      });
-    });
+      const family =
+        window.myFamilies.find(
+          (fam) =>
+            String(fam.id) === String(familyId)
+        );
+
+      if (!family) return;
+
+      window.currentFamilyId = family.id;
+
+      const dashboard =
+        document.getElementById("mainContent");
+
+      const familyView =
+        document.getElementById("familyView");
+
+      if (!dashboard || !familyView) return;
+
+      dashboard.style.display = "none";
+
+      familyView.style.display = "block";
+
+      document
+        .getElementById("familyViewName")
+        .innerText = family.name;
+
+      document
+        .getElementById("familyViewMembers")
+        .innerHTML =
+          family.members
+            .map(
+              (member) =>
+                `<span class="familyMember">${member}</span>`
+            )
+            .join("");
+
+      await loadFamilyTasks(family.id);
+    };
+
+    window.closeFamily = function () {
+
+      window.currentFamilyId = null;
+
+      const dashboard =
+        document.getElementById("mainContent");
+
+      const familyView =
+        document.getElementById("familyView");
+
+      if (!dashboard || !familyView) return;
+
+      familyView.style.display = "none";
+
+      dashboard.style.display = "block";
+    };
+
+    /*
+     * LOAD TASKS FOR CURRENT FAMILY
+     */
+
+    async function loadFamilyTasks(familyId) {
+
+      const list =
+        document.getElementById("familyTaskList");
+
+      if (!list) return;
+
+      list.innerHTML =
+        `<p class="emptyHint">Loading tasks...</p>`;
+
+      try {
+
+        const token =
+          localStorage.getItem("token");
+
+        const response =
+          await fetch("/api/tasks", {
+            headers: {
+              Authorization:
+                "Bearer " + token
+            }
+          });
+
+        if (!response.ok) {
+          throw new Error(
+            "Failed to load tasks"
+          );
+        }
+
+        const data =
+          await response.json();
+
+        const currentUser =
+          JSON.parse(
+            localStorage.getItem("currentUser") || "null"
+          );
+
+        const family =
+          window.myFamilies.find(
+            (fam) =>
+              String(fam.id) ===
+              String(familyId)
+          );
+
+        if (!family) {
+          list.innerHTML =
+            `<p class="emptyHint">Family not found.</p>`;
+          return;
+        }
+
+        const familyTasks =
+          data.tasks.filter(
+            (task) =>
+              task.familyName === family.name
+          );
+
+        if (familyTasks.length === 0) {
+
+          list.innerHTML =
+            `<p class="emptyHint">
+              No tasks in this family yet. Add the first one above.
+            </p>`;
+
+          return;
+        }
+
+        list.innerHTML = "";
+
+        familyTasks.forEach((task) => {
+
+          const completedToday =
+            currentUser &&
+            task.completedToday.includes(
+              currentUser.username
+            );
+
+          const completedUsers =
+            task.completedToday.length
+              ? task.completedToday.join(", ")
+              : "Nobody yet";
+
+          list.innerHTML += `
+
+            <div class="task ${completedToday ? "completed" : ""}">
+
+              <p class="taskFamilyTag">
+                ${task.familyName}
+              </p>
+
+              <h2>
+                ${task.text}
+              </h2>
+
+              <p>
+                Created by:
+                ${task.createdBy || "Unknown"}
+              </p>
+
+              <p>
+                Completed today by:
+                ${completedUsers}
+              </p>
+
+              ${
+                !completedToday
+                  ? `
+                    <button
+                      class="completeBtn"
+                      onclick="completeFamilyTask('${task.id}')"
+                    >
+                      Complete Today
+                    </button>
+                  `
+                  : `
+                    <h3>
+                      You Completed This Today
+                    </h3>
+                  `
+              }
+
+            </div>
+
+          `;
+        });
+
+      } catch (error) {
+
+        console.error(error);
+
+        list.innerHTML =
+          `<p class="emptyHint">
+            Could not load family tasks.
+          </p>`;
+      }
+    }
+
+    /*
+     * ADD TASK DIRECTLY TO FAMILY
+     */
+
+    window.addFamilyTask = async function () {
+
+      const input =
+        document.getElementById(
+          "familyTaskInput"
+        );
+
+      if (!input) return;
+
+      const text =
+        input.value.trim();
+
+      if (!text) return;
+
+      const familyId =
+        window.currentFamilyId;
+
+      if (!familyId) {
+
+        alert(
+          "Please select a family first"
+        );
+
+        return;
+      }
+
+      try {
+
+        const token =
+          localStorage.getItem("token");
+
+        const response =
+          await fetch("/api/tasks", {
+
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              Authorization:
+                "Bearer " + token
+            },
+
+            body: JSON.stringify({
+              text,
+              familyId
+            })
+          });
+
+        const data =
+          await response.json();
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            "Failed to create task"
+          );
+        }
+
+        input.value = "";
+
+        await loadFamilyTasks(
+          familyId
+        );
+
+        if (window.refreshTasks) {
+          await window.refreshTasks();
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(error.message);
+      }
+    };
+
+    /*
+     * SUGGESTED FAMILY TASK
+     */
+
+    window.addFamilyTaskSuggestion =
+      async function (text) {
+
+        const input =
+          document.getElementById(
+            "familyTaskInput"
+          );
+
+        if (input) {
+          input.value = text;
+        }
+
+        await window.addFamilyTask();
+      };
+
+    /*
+     * COMPLETE TASK INSIDE FAMILY
+     */
+
+    window.completeFamilyTask =
+      async function (taskId) {
+
+        try {
+
+          if (window.completeTask) {
+
+            await window.completeTask(
+              taskId
+            );
+
+          } else {
+
+            const token =
+              localStorage.getItem(
+                "token"
+              );
+
+            await fetch(
+              `/api/tasks/${taskId}/complete`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization:
+                    "Bearer " + token
+                }
+              }
+            );
+          }
+
+          if (window.currentFamilyId) {
+
+            await loadFamilyTasks(
+              window.currentFamilyId
+            );
+          }
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(error.message);
+        }
+      };
+
+    /*
+     * CHAT
+     */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+
+        const chatToggle =
+          document.getElementById(
+            "chatToggle"
+          );
+
+        const chatWindow =
+          document.getElementById(
+            "chatWindow"
+          );
+
+        const closeChat =
+          document.getElementById(
+            "closeChat"
+          );
+
+        if (chatToggle && chatWindow) {
+
+          chatToggle.addEventListener(
+            "click",
+            function () {
+
+              chatWindow.style.display =
+                chatWindow.style.display ===
+                "flex"
+                  ? "none"
+                  : "flex";
+            }
+          );
+        }
+
+        if (closeChat && chatWindow) {
+
+          closeChat.addEventListener(
+            "click",
+            function () {
+
+              chatWindow.style.display =
+                "none";
+            }
+          );
+        }
+
+      }
+    );
+
   </script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"
+  ></script>
+
   <script>
     window.API_BASE = "/api";
   </script>
 
   <!-- JS -->
-  <script type="module" src="./js/auth.js"></script>
-  <script type="module" src="./js/families.js"></script>
-  <script type="module" src="./js/profiles.js"></script>
-  <script type="module" src="./js/requests.js"></script>
-  <script type="module" src="./js/tasks.js"></script>
-  <script type="module" src="./js/chat.js"></script>
-  <script type="module" src="./js/counters.js"></script>
-  <script type="module" src="./js/ui.js"></script>
+
+  <script
+    type="module"
+    src="./js/auth.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/families.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/profiles.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/requests.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/tasks.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/chat.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/counters.js"
+  ></script>
+
+  <script
+    type="module"
+    src="./js/ui.js"
+  ></script>
 
 </body>
 </html>
-
+EOF

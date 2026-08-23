@@ -1,6 +1,7 @@
 import { apiFetch } from "./api.js";
 
 window.myFamilies = [];
+window.currentFamilyId = null;
 
 window.createFamily = async function (inputId) {
   const input = document.getElementById(inputId);
@@ -29,11 +30,8 @@ function renderOnboarding(hasFamilies) {
 
   if (!onboarding || !mainApp) return;
 
-  // Onboarding is only a prompt now.
-  // The main app must remain accessible so users
-  // without a family can accept invitations.
   onboarding.style.display = hasFamilies ? "none" : "block";
-  mainApp.style.display = "block";
+  mainApp.style.display = hasFamilies ? "block" : "none";
 }
 
 function renderFamiliesList() {
@@ -42,18 +40,23 @@ function renderFamiliesList() {
   if (!list) return;
 
   if (window.myFamilies.length === 0) {
-    list.innerHTML = `<p class="emptyHint">You're not in a family yet.</p>`;
+    list.innerHTML =
+      `<p class="emptyHint">You're not in a family yet.</p>`;
     return;
   }
 
   list.innerHTML = window.myFamilies
     .map(
       (fam) => `
-      <div class="familyCard">
-        <p class="familyCardName">${fam.name}</p>
-        <p class="familyCardMembers">${fam.members.join(", ")}</p>
-      </div>
-    `
+        <div
+          class="familyCard"
+          onclick="openFamily('${fam.id}')"
+          style="cursor:pointer;"
+        >
+          <p class="familyCardName">${fam.name}</p>
+          <p class="familyCardMembers">${fam.members.join(", ")}</p>
+        </div>
+      `
     )
     .join("");
 }
@@ -75,21 +78,69 @@ function renderFamilySelect(selectId) {
 }
 
 window.refreshFamilies = async function () {
-  let data;
-
   try {
-    data = await apiFetch("/families/mine");
-  } catch (err) {
-    console.error(err);
-    return;
+    const data = await apiFetch("/families/mine");
+
+    window.myFamilies = data.families || [];
+
+    renderOnboarding(window.myFamilies.length > 0);
+    renderFamiliesList();
+
+    renderFamilySelect("taskFamilySelect");
+    renderFamilySelect("inviteFamilySelect");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+window.openFamily = function (familyId) {
+  const family = window.myFamilies.find(
+    (fam) => String(fam.id) === String(familyId)
+  );
+
+  if (!family) return;
+
+  window.currentFamilyId = family.id;
+
+  const dashboard = document.getElementById("mainContent");
+  const familyView = document.getElementById("familyView");
+
+  if (!dashboard || !familyView) return;
+
+  dashboard.style.display = "none";
+  familyView.style.display = "block";
+
+  const nameElement = document.getElementById("familyViewName");
+  const membersElement = document.getElementById("familyViewMembers");
+
+  if (nameElement) {
+    nameElement.textContent = family.name;
   }
 
-  window.myFamilies = data.families || [];
+  if (membersElement) {
+    membersElement.innerHTML = family.members
+      .map(
+        (member) =>
+          `<span class="familyMember">${member}</span>`
+      )
+      .join("");
+  }
 
-  renderOnboarding(window.myFamilies.length > 0);
-  renderFamiliesList();
-  renderFamilySelect("taskFamilySelect");
-  renderFamilySelect("inviteFamilySelect");
+  if (window.refreshFamilyTasks) {
+    window.refreshFamilyTasks(family.id);
+  }
+};
+
+window.closeFamily = function () {
+  window.currentFamilyId = null;
+
+  const dashboard = document.getElementById("mainContent");
+  const familyView = document.getElementById("familyView");
+
+  if (!dashboard || !familyView) return;
+
+  familyView.style.display = "none";
+  dashboard.style.display = "block";
 };
 
 window.addEventListener("auth:ready", refreshFamilies);
