@@ -33,12 +33,12 @@ app.get("/readyz", async (req, res) => {
   }
 });
 
-app.use("/auth", authRoutes);
-app.use("/tasks", taskRoutes);
-app.use("/stats", statsRoutes);
-app.use("/messages", messageRoutes);
-app.use("/users", userRoutes);
-app.use("/requests", requestRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
+app.use("/api/stats", statsRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/requests", requestRoutes);
 
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
