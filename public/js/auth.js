@@ -16,10 +16,13 @@ window.register = async function () {
       method: "POST",
       body: JSON.stringify({ username, email, password }),
     });
+
     alert("Registered successfully");
+
     document.getElementById("registerUsername").value = "";
     document.getElementById("registerEmail").value = "";
     document.getElementById("registerPassword").value = "";
+
     showLogin();
   } catch (error) {
     console.error(error);
@@ -42,9 +45,12 @@ window.login = async function () {
       method: "POST",
       body: JSON.stringify({ username, password }),
     });
+
     setToken(data.token);
     setCurrentUser(data.user);
+
     alert("Logged in successfully");
+
     await enterApp();
   } catch (error) {
     console.error(error);
@@ -57,8 +63,11 @@ window.logout = async function () {
   try {
     await apiFetch("/auth/logout", { method: "POST" });
   } catch (err) {}
+
   setToken(null);
   setCurrentUser(null);
+  window.__authReady = false;
+
   document.getElementById("auth").style.display = "block";
   document.getElementById("app").style.display = "none";
 };
@@ -67,27 +76,38 @@ window.logout = async function () {
 async function enterApp() {
   document.getElementById("auth").style.display = "none";
   document.getElementById("app").style.display = "block";
+
   const user = getCurrentUser();
+
   if (user) {
-    document.getElementById("welcomeUser").innerText = "Welcome, " + user.username;
+    document.getElementById("welcomeUser").innerText =
+      "Welcome, " + user.username;
   }
+
+  window.__authReady = true;
   window.dispatchEvent(new Event("auth:ready"));
 }
 
 async function checkAuthOnLoad() {
   const token = getToken();
+
   if (!token) {
     document.getElementById("auth").style.display = "block";
     document.getElementById("app").style.display = "none";
     return;
   }
+
   try {
     const data = await apiFetch("/auth/me");
+
     setCurrentUser(data.user);
+
     await enterApp();
   } catch (err) {
     setToken(null);
     setCurrentUser(null);
+    window.__authReady = false;
+
     document.getElementById("auth").style.display = "block";
     document.getElementById("app").style.display = "none";
   }

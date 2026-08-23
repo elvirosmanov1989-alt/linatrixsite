@@ -73,3 +73,7 @@ window.refreshFamilies = async function () {
 
 window.addEventListener("auth:ready", refreshFamilies);
 
+if (window.__authReady) {
+  refreshFamilies();
+}
+
