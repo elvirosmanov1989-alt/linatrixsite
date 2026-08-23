@@ -7,9 +7,10 @@ const router = express.Router();
 router.get("/", requireAuth, async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT fr.id, u.username AS from_username, fr.status
+      `SELECT fr.id, u.username AS from_username, f.name AS family_name, fr.status
        FROM family_requests fr
        JOIN users u ON u.id = fr.from_user_id
+       JOIN families f ON f.id = fr.family_id
        WHERE fr.to_user_id = $1 AND fr.status = 'pending'`,
       [req.user.id]
     );
@@ -20,19 +21,38 @@ router.get("/", requireAuth, async (req, res) => {
   }
 });
 
+// Invite a user (found via search) into one of the sender's families.
 router.post("/", requireAuth, async (req, res) => {
-  const { toUsername } = req.body;
-  if (!toUsername) return res.status(400).json({ error: "toUsername required" });
+  const { toUsername, familyId } = req.body;
+  if (!toUsername || !familyId) {
+    return res.status(400).json({ error: "toUsername and familyId required" });
+  }
   try {
+    const membership = await pool.query(
+      "SELECT 1 FROM family_members WHERE family_id = $1 AND user_id = $2",
+      [familyId, req.user.id]
+    );
+    if (membership.rowCount === 0) {
+      return res.status(403).json({ error: "You are not a member of that family" });
+    }
+
     const toUserResult = await pool.query("SELECT id FROM users WHERE username = $1", [toUsername]);
     const toUser = toUserResult.rows[0];
     if (!toUser) return res.status(404).json({ error: "User not found" });
 
+    const alreadyMember = await pool.query(
+      "SELECT 1 FROM family_members WHERE family_id = $1 AND user_id = $2",
+      [familyId, toUser.id]
+    );
+    if (alreadyMember.rowCount > 0) {
+      return res.status(409).json({ error: "That user is already in this family" });
+    }
+
     await pool.query(
-      `INSERT INTO family_requests (from_user_id, to_user_id, status)
-       VALUES ($1, $2, 'pending')
-       ON CONFLICT (from_user_id, to_user_id) DO NOTHING`,
-      [req.user.id, toUser.id]
+      `INSERT INTO family_requests (from_user_id, to_user_id, family_id, status)
+       VALUES ($1, $2, $3, 'pending')
+       ON CONFLICT (from_user_id, to_user_id, family_id) DO NOTHING`,
+      [req.user.id, toUser.id, familyId]
     );
     res.status(201).json({ ok: true });
   } catch (err) {
@@ -47,17 +67,17 @@ router.post("/:id/accept", requireAuth, async (req, res) => {
     const result = await pool.query(
       `UPDATE family_requests SET status = 'accepted'
        WHERE id = $1 AND to_user_id = $2
-       RETURNING from_user_id, to_user_id`,
+       RETURNING family_id`,
       [requestId, req.user.id]
     );
     const request = result.rows[0];
     if (!request) return res.status(404).json({ error: "Request not found" });
 
     await pool.query(
-      `INSERT INTO family_connections (user_id_a, user_id_b)
+      `INSERT INTO family_members (family_id, user_id)
        VALUES ($1, $2)
-       ON CONFLICT (user_id_a, user_id_b) DO NOTHING`,
-      [request.from_user_id, request.to_user_id]
+       ON CONFLICT (family_id, user_id) DO NOTHING`,
+      [request.family_id, req.user.id]
     );
     res.json({ ok: true });
   } catch (err) {
@@ -66,24 +86,25 @@ router.post("/:id/accept", requireAuth, async (req, res) => {
   }
 });
 
-
+// Repurposed: returns the user's families, shaped the same way the old
+// pairwise "connections" list was, so counters.js needs no changes.
 router.get("/connections", requireAuth, async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT fc.id,
-              ua.username AS username_a,
-              ub.username AS username_b
-       FROM family_connections fc
-       JOIN users ua ON ua.id = fc.user_id_a
-       JOIN users ub ON ub.id = fc.user_id_b
-       WHERE fc.user_id_a = $1 OR fc.user_id_b = $1`,
+      `SELECT f.id, f.name, u.username
+       FROM families f
+       JOIN family_members fm ON fm.family_id = f.id
+       JOIN users u ON u.id = fm.user_id
+       WHERE f.id IN (SELECT family_id FROM family_members WHERE user_id = $1)
+       ORDER BY f.id, u.username`,
       [req.user.id]
     );
-    const connections = result.rows.map(r => ({
-      id: r.id,
-      members: [r.username_a, r.username_b],
-    }));
-    res.json({ connections });
+    const familiesById = {};
+    for (const row of result.rows) {
+      if (!familiesById[row.id]) familiesById[row.id] = { id: row.id, name: row.name, members: [] };
+      familiesById[row.id].members.push(row.username);
+    }
+    res.json({ connections: Object.values(familiesById) });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch connections" });
@@ -91,3 +112,4 @@ router.get("/connections", requireAuth, async (req, res) => {
 });
 
 module.exports = router;
+

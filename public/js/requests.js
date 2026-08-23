@@ -3,8 +3,9 @@ import { apiFetch } from "./api.js";
 window.acceptRequest = async function (requestId) {
   try {
     await apiFetch(`/requests/${requestId}/accept`, { method: "POST" });
-    alert("Family connection created");
+    alert("Joined the family");
     await refreshRequests();
+    if (window.refreshFamilies) await window.refreshFamilies();
   } catch (error) {
     console.error(error);
     alert(error.message);
@@ -21,11 +22,15 @@ async function refreshRequests() {
     console.error(err);
     return;
   }
+  if (data.requests.length === 0) {
+    notifications.innerHTML = `<p class="emptyHint">No pending requests.</p>`;
+    return;
+  }
   notifications.innerHTML = "";
   data.requests.forEach((request) => {
     notifications.innerHTML += `
       <div class="message">
-        <strong>${request.from_username}</strong> wants family connection.
+        <strong>${request.from_username}</strong> invited you to join <strong>${request.family_name}</strong>.
         <br><br>
         <button class="mainBtn" onclick="acceptRequest('${request.id}')">Accept</button>
       </div>
@@ -39,3 +44,4 @@ window.addEventListener("DOMContentLoaded", () => {
   setInterval(refreshRequests, POLL_INTERVAL_MS);
 });
 window.addEventListener("auth:ready", refreshRequests);
+

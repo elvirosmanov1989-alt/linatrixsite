@@ -13,6 +13,7 @@ const statsRoutes = require("./routes/stats");
 const messageRoutes = require("./routes/messages");
 const userRoutes = require("./routes/users");
 const requestRoutes = require("./routes/requests");
+const familyRoutes = require("./routes/families");
 
 const app = express();
 const server = http.createServer(app);
@@ -39,6 +40,7 @@ app.use("/api/stats", statsRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/requests", requestRoutes);
+app.use("/api/families", familyRoutes);
 
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
@@ -66,3 +68,4 @@ async function start() {
 }
 
 start();
+

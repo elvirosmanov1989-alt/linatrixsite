@@ -12,15 +12,11 @@ router.get("/", requireAuth, async (req, res) => {
   try {
     const today = todayDate();
     const tasksResult = await pool.query(
-      `SELECT t.id, t.text, u.username AS created_by, t.created_at
+      `SELECT t.id, t.text, u.username AS created_by, t.created_at, f.name AS family_name
        FROM tasks t
        JOIN users u ON u.id = t.created_by
-       WHERE t.created_by = $1
-          OR t.created_by IN (
-            SELECT CASE WHEN fc.user_id_a = $1 THEN fc.user_id_b ELSE fc.user_id_a END
-            FROM family_connections fc
-            WHERE fc.user_id_a = $1 OR fc.user_id_b = $1
-          )
+       JOIN families f ON f.id = t.family_id
+       WHERE t.family_id IN (SELECT family_id FROM family_members WHERE user_id = $1)
        ORDER BY t.created_at DESC`,
       [req.user.id]
     );
@@ -43,6 +39,7 @@ router.get("/", requireAuth, async (req, res) => {
       id: t.id,
       text: t.text,
       createdBy: t.created_by,
+      familyName: t.family_name,
       completedToday: completionsByTask[t.id] || [],
     }));
 
@@ -54,12 +51,21 @@ router.get("/", requireAuth, async (req, res) => {
 });
 
 router.post("/", requireAuth, async (req, res) => {
-  const { text } = req.body;
+  const { text, familyId } = req.body;
   if (!text || !text.trim()) return res.status(400).json({ error: "Task text required" });
+  if (!familyId) return res.status(400).json({ error: "familyId required" });
   try {
+    const membership = await pool.query(
+      "SELECT 1 FROM family_members WHERE family_id = $1 AND user_id = $2",
+      [familyId, req.user.id]
+    );
+    if (membership.rowCount === 0) {
+      return res.status(403).json({ error: "You are not a member of that family" });
+    }
+
     const result = await pool.query(
-      "INSERT INTO tasks (text, created_by) VALUES ($1, $2) RETURNING id, text",
-      [text.trim(), req.user.id]
+      "INSERT INTO tasks (text, created_by, family_id) VALUES ($1, $2, $3) RETURNING id, text",
+      [text.trim(), req.user.id, familyId]
     );
     res.status(201).json({ task: result.rows[0] });
   } catch (err) {
@@ -91,3 +97,4 @@ router.post("/:id/complete", requireAuth, async (req, res) => {
 });
 
 module.exports = router;
+

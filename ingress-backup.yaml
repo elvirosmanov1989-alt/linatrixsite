@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    argocd.argoproj.io/tracking-id: family-task-app:networking.k8s.io/Ingress:family-task-app/family-task-ingress
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"family-task-app:networking.k8s.io/Ingress:family-task-app/family-task-ingress","nginx.ingress.kubernetes.io/proxy-read-timeout":"3600","nginx.ingress.kubernetes.io/proxy-send-timeout":"3600"},"name":"family-task-ingress","namespace":"family-task-app"},"spec":{"ingressClassName":"nginx","rules":[{"host":"linatrixsite.local","http":{"paths":[{"backend":{"service":{"name":"frontend","port":{"number":80}}},"path":"/","pathType":"Prefix"},{"backend":{"service":{"name":"backend","port":{"number":3000}}},"path":"/api","pathType":"Prefix"}]}}]}}
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+  creationTimestamp: "2026-08-04T19:14:01Z"
+  generation: 1
+  name: family-task-ingress
+  namespace: family-task-app
+  resourceVersion: "310516"
+  uid: 3b4d0161-ed7f-40b0-89c8-9ecb678fc2eb
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: linatrixsite.local
+    http:
+      paths:
+      - backend:
+          service:
+            name: frontend
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+      - backend:
+          service:
+            name: backend
+            port:
+              number: 3000
+        path: /api
+        pathType: Prefix
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.168.13.134
